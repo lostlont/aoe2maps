@@ -17,6 +17,31 @@ pub struct Map
 	properties: MapProperties,
 }
 
+impl Map
+{
+	fn row_class(&self) -> &str
+	{
+		if self.properties.active
+		{
+			"active-row"
+		}
+		else
+		{
+			"inactive-row"
+		}
+	}
+
+	fn render_features(&self) -> Html
+	{
+		html!
+		{
+			<ul>
+				<li>{ &self.properties.map_data.water_presence }</li>
+			</ul>
+		}
+	}
+}
+
 impl Component for Map
 {
 	type Message = ();
@@ -42,21 +67,13 @@ impl Component for Map
 
 	fn view(&self) -> Html
 	{
-		let row_class = if self.properties.active
-		{
-			"active-row"
-		}
-		else
-		{
-			"inactive-row"
-		};
-
 		html!
 		{
-			<tr class=row_class>
+			<tr class=self.row_class()>
 				<td>{ &self.properties.map_data.name }</td>
 				<td><img src=&self.properties.map_data.image /></td>
 				<td>{ &self.properties.map_data.expansion_pack }</td>
+				<td>{ self.render_features() }</td>
 			</tr>
 		}
 	}

@@ -44,6 +44,7 @@ impl Component for Page
 				<tr>
 					<th>{ "Név" }</th>
 					<th>{ "Kép" }</th>
+					<th>{ "Kiegészítő" }</th>
 					<th>{ "Jellemzők" }</th>
 				</tr>
 				{ for self.properties.maps.iter().map(|md| md.render()) }
