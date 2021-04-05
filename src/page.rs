@@ -1,6 +1,7 @@
 use yew::prelude::*;
 
 use crate::data::map_data::MapData;
+use super::map::Map;
 
 #[derive(Properties, Clone)]
 pub struct PageProperties
@@ -11,6 +12,17 @@ pub struct PageProperties
 pub struct Page
 {
 	properties: PageProperties,
+}
+
+impl Page
+{
+	fn render_map(map_data: &MapData) -> Html
+	{
+		html!
+		{
+			<Map map_data=map_data/>
+		}
+	}
 }
 
 impl Component for Page
@@ -47,7 +59,7 @@ impl Component for Page
 					<th>{ "Kiegészítő" }</th>
 					<th>{ "Jellemzők" }</th>
 				</tr>
-				{ for self.properties.maps.iter().map(|md| md.render()) }
+				{ for self.properties.maps.iter().map(Page::render_map) }
 			</table>
 		}
 	}

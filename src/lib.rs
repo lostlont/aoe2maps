@@ -4,7 +4,6 @@ use yew::prelude::*;
 mod data;
 mod map;
 mod page;
-mod renderable_map_data;
 
 use data::create_maps;
 use page::Page;
