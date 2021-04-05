@@ -1,9 +1,13 @@
-use std::fmt::{
-	Display,
-	Error,
-	Formatter,
+use std::
+{
+	fmt::
+	{
+		Display,
+		Error,
+		Formatter,
+	},
+	result::Result,
 };
-use std::result::Result;
 
 #[derive(Clone)]
 pub enum ExpansionPack
