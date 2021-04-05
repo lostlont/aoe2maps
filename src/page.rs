@@ -1,6 +1,6 @@
 use yew::prelude::*;
 
-use crate::map_data::MapData;
+use crate::data::map_data::MapData;
 
 #[derive(Properties, Clone)]
 pub struct PageProperties

@@ -1,5 +1,8 @@
-use crate::expansion_pack::ExpansionPack;
-use crate::map_data::MapData;
+pub mod expansion_pack;
+pub mod map_data;
+
+use crate::data::expansion_pack::ExpansionPack;
+use crate::data::map_data::MapData;
 
 pub fn create_maps() -> Vec<MapData>
 {

@@ -1,11 +1,10 @@
 use wasm_bindgen::prelude::*;
 use yew::prelude::*;
 
-mod expansion_pack;
 mod data;
 mod map;
-mod map_data;
 mod page;
+mod renderable_map_data;
 
 use data::create_maps;
 use page::Page;

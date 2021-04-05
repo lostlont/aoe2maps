@@ -1,14 +1,7 @@
 use yew::prelude::*;
 
+use crate::data::map_data::MapData;
 use crate::map::Map;
-use crate::expansion_pack::ExpansionPack;
-
-#[derive(Clone)]
-pub struct MapData
-{
-	pub name: String,
-	pub expansion_pack: ExpansionPack,
-}
 
 impl Renderable for MapData
 {
