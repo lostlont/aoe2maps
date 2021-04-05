@@ -55,7 +55,7 @@ impl Component for Map
 		{
 			<tr class=row_class>
 				<td>{ &self.properties.map_data.name }</td>
-				<td></td>
+				<td><img src=&self.properties.map_data.image /></td>
 				<td>{ &self.properties.map_data.expansion_pack }</td>
 			</tr>
 		}
