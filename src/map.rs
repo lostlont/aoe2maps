@@ -1,10 +1,12 @@
 use yew::prelude::*;
 use yew::Properties;
 
+use crate::map_data::MapData;
+
 #[derive(Properties, Clone)]
 pub struct MapProperties
 {
-	pub name: String,
+	pub map_data: MapData,
 
 	#[prop_or(true)]
 	pub active: bool,
@@ -52,9 +54,9 @@ impl Component for Map
 		html!
 		{
 			<tr class=row_class>
-				<td>{ &self.properties.name }</td>
-				<td>{ "B" }</td>
-				<td>{ "C" }</td>
+				<td>{ &self.properties.map_data.name }</td>
+				<td></td>
+				<td>{ &self.properties.map_data.expansion_pack }</td>
 			</tr>
 		}
 	}

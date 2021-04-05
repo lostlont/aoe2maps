@@ -1,20 +1,28 @@
 use yew::prelude::*;
 
-use crate::map::Map;
+use crate::map_data::MapData;
+
+#[derive(Properties, Clone)]
+pub struct PageProperties
+{
+	pub maps: Vec<MapData>,
+}
 
 pub struct Page
 {
+	properties: PageProperties,
 }
 
 impl Component for Page
 {
 	type Message = ();
-	type Properties = ();
+	type Properties = PageProperties;
 
-	fn create(_: Self::Properties, _: ComponentLink<Self>) -> Self
+	fn create(properties: Self::Properties, _: ComponentLink<Self>) -> Self
 	{
 		Self
 		{
+			properties,
 		}
 	}
 
@@ -30,11 +38,6 @@ impl Component for Page
 
 	fn view(&self) -> Html
 	{
-		let render_map = |_| html!
-		{
-			<Map name="test"/>
-		};
-
 		html!
 		{
 			<table>
@@ -43,7 +46,7 @@ impl Component for Page
 					<th>{ "Kép" }</th>
 					<th>{ "Jellemzők" }</th>
 				</tr>
-				{ for (0..3).map(render_map) }
+				{ for self.properties.maps.iter().map(|md| md.render()) }
 			</table>
 		}
 	}
