@@ -3,6 +3,7 @@
 use wasm_bindgen::prelude::*;
 use yew::prelude::*;
 
+mod accordion;
 mod data;
 mod map;
 mod menu;

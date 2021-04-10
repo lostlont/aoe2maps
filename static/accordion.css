@@ -1,0 +1,26 @@
+.accordion
+{
+	display: flex;
+	flex-direction: column;
+}
+
+.accordion > button
+{
+	background-color: var(--header-background-color);
+	border: 0;
+	cursor: pointer;
+	padding: 4px;
+	text-align: left;
+}
+
+.accordion > button:hover
+{
+	background-color: var(--row-background-color);
+}
+
+.accordion > div
+{
+	margin: 4px;
+	transition: max-height 0.2s ease-in-out;
+	overflow: hidden;
+}
