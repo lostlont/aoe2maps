@@ -5,7 +5,9 @@ use yew::prelude::*;
 
 mod data;
 mod map;
+mod menu;
 mod page;
+mod table;
 
 use data::create_maps;
 use page::Page;

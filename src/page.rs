@@ -1,7 +1,8 @@
 use yew::prelude::*;
 
 use crate::data::map_data::MapData;
-use super::map::Map;
+use super::table::Table;
+use super::menu::Menu;
 
 #[derive(Properties, Clone)]
 pub struct PageProperties
@@ -12,17 +13,6 @@ pub struct PageProperties
 pub struct Page
 {
 	properties: PageProperties,
-}
-
-impl Page
-{
-	fn render_map(map_data: &MapData) -> Html
-	{
-		html!
-		{
-			<Map map_data=map_data/>
-		}
-	}
 }
 
 impl Component for Page
@@ -53,16 +43,8 @@ impl Component for Page
 		html!
 		{
 			<>
-				<div class="table">
-					<div class="header"><h2>{ "Név" }</h2></div>
-					<div class="header"><h2>{ "Kép" }</h2></div>
-					<div class="header"><h2>{ "Kiegészítő" }</h2></div>
-					<div class="header"><h2>{ "Jellemzők" }</h2></div>
-					{ for self.properties.maps.iter().map(Page::render_map) }
-				</div>
-				<div class="menu">
-					{ "Menu" }
-				</div>
+				<Table maps=&self.properties.maps />
+				<Menu />
 			</>
 		}
 	}
