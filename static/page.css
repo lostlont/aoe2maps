@@ -1,0 +1,45 @@
+:root
+{
+	--background-color: rgb(215, 215, 157);
+	--row-background-color: rgb(194, 194, 141);
+	--header-background-color: rgb(172, 172, 126);
+}
+
+body
+{
+	background-color: var(--background-color);
+	font-family: "Helvetica Neue", helvetica, arial, sans-serif;
+}
+
+.grid
+{
+	display: grid;
+	grid-auto-rows: 1fr;
+	grid-template-columns: repeat(4, minmax(auto, 240px));
+	grid-template-rows: auto;
+	justify-content: center;
+	place-items: stretch;
+	row-gap: 3px;
+}
+
+.grid > *
+{
+	background-color: var(--row-background-color);
+	display: grid;
+	place-items: center;
+}
+
+.grid > .header
+{
+	background-color: var(--header-background-color);
+}
+
+h2
+{
+	font-size: 1.5em;
+}
+
+h3
+{
+	font-size: 1.25em;
+}

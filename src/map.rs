@@ -69,12 +69,12 @@ impl Component for Map
 	{
 		html!
 		{
-			<tr class=self.row_class()>
-				<td>{ &self.properties.map_data.name }</td>
-				<td><img src=&self.properties.map_data.image /></td>
-				<td>{ &self.properties.map_data.expansion_pack }</td>
-				<td>{ self.render_features() }</td>
-			</tr>
+			<>
+				<div class=self.row_class()><h3>{ &self.properties.map_data.name }</h3></div>
+				<div class=self.row_class()><img src=&self.properties.map_data.image /></div>
+				<div class=self.row_class()>{ &self.properties.map_data.expansion_pack }</div>
+				<div class=self.row_class()>{ self.render_features() }</div>
+			</>
 		}
 	}
 }

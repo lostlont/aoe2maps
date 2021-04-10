@@ -52,15 +52,13 @@ impl Component for Page
 	{
 		html!
 		{
-			<table>
-				<tr>
-					<th>{ "Név" }</th>
-					<th>{ "Kép" }</th>
-					<th>{ "Kiegészítő" }</th>
-					<th>{ "Jellemzők" }</th>
-				</tr>
+			<div class="grid">
+				<div class="header"><h2>{ "Név" }</h2></div>
+				<div class="header"><h2>{ "Kép" }</h2></div>
+				<div class="header"><h2>{ "Kiegészítő" }</h2></div>
+				<div class="header"><h2>{ "Jellemzők" }</h2></div>
 				{ for self.properties.maps.iter().map(Page::render_map) }
-			</table>
+			</div>
 		}
 	}
 }
