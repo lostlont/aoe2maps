@@ -21,6 +21,18 @@
 .accordion > div
 {
 	margin: 4px;
-	transition: max-height 0.2s ease-in-out;
+	transition-duration: 0.2s;
+	transition-property: color, max-height;
+	transition-timing-function: ease-in-out;
 	overflow: hidden;
+}
+
+.accordion > div.closed
+{
+	color: rgba(0, 0, 0, 0);
+}
+
+.accordion > div.opened
+{
+	color: rgba(0, 0, 0, 1);
 }
