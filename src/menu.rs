@@ -44,9 +44,18 @@ impl Component for Menu
 					<div>{ ExpansionPack::TheLastKhans }</div>
 				</Accordion>
 				<Accordion title="Víz mennyisége">
-					<div>{ WaterPresence::None }</div>
-					<div>{ WaterPresence::Some }</div>
-					<div>{ WaterPresence::Islands }</div>
+					<label>
+						<input type="checkbox" value=WaterPresence::None checked=true />
+						{ WaterPresence::None }
+					</label>
+					<label>
+						<input type="checkbox" value=WaterPresence::Some checked=true />
+						{ WaterPresence::Some }
+					</label>
+					<label>
+						<input type="checkbox" value=WaterPresence::Islands checked=true />
+						{ WaterPresence::Islands }
+					</label>
 				</Accordion>
 			</div>
 		}
