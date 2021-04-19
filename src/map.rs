@@ -1,7 +1,16 @@
-use yew::prelude::*;
-use yew::Properties;
+use std::collections::HashSet;
+use yew::
+{
+	prelude::*,
+	Properties,
+};
 
-use crate::data::map_data::MapData;
+use crate::agents::settings::{ Request, Settings };
+use crate::data::
+{
+	map_data::MapData,
+	water_presence::WaterPresence,
+};
 
 #[derive(Properties, Clone)]
 pub struct MapProperties
@@ -15,6 +24,7 @@ pub struct MapProperties
 pub struct Map
 {
 	properties: MapProperties,
+	_settings: Box<dyn Bridge<Settings>>,
 }
 
 impl Map
@@ -42,21 +52,40 @@ impl Map
 	}
 }
 
+pub enum Message
+{
+	WaterPresence(HashSet<WaterPresence>),
+}
+
 impl Component for Map
 {
-	type Message = ();
+	type Message = Message;
 	type Properties = MapProperties;
 
-	fn create(properties: Self::Properties, _: ComponentLink<Self>) -> Self
+	fn create(properties: Self::Properties, link: ComponentLink<Self>) -> Self
 	{
+		let callback = |request| match request
+		{
+			Request::WaterPresence(allowed_water_presence) => Message::WaterPresence(allowed_water_presence),
+		};
+
 		Self
 		{
-			properties
+			properties,
+			_settings: Settings::bridge(link.callback(callback)),
 		}
 	}
 
-	fn update(&mut self, _: Self::Message) -> bool
+	fn update(&mut self, message: Self::Message) -> bool
 	{
+		match message
+		{
+			Message::WaterPresence(allowed_water_presence) =>
+			{
+				self.properties.active = allowed_water_presence.contains(&self.properties.map_data.water_presence);
+			},
+		}
+
 		true
 	}
 

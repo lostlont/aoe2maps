@@ -9,7 +9,7 @@ use std::
 	result::Result,
 };
 
-#[derive(Clone)]
+#[derive(Clone, Eq, Hash, PartialEq)]
 pub enum WaterPresence
 {
 	None,

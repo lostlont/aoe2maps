@@ -28,6 +28,9 @@ body
 	display: grid;
 	place-items: center;
 	position: relative;
+	transition-duration: 0.2s;
+	transition-property: height, opacity;
+	transition-timing-function: ease-in-out;
 }
 
 .table > .header
@@ -45,6 +48,16 @@ body
 	top: 0;
 	width: 100%;
 	z-index: -1;
+}
+
+.table > .active-row
+{
+	opacity: 100%;
+}
+
+.table > .inactive-row
+{
+	opacity: 0%;
 }
 
 .menu
