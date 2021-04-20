@@ -53,10 +53,12 @@ impl Component for Table
 		html!
 		{
 			<div class="table">
-				<div class="header"><h2>{ "Név" }</h2></div>
-				<div class="header"><h2>{ "Kép" }</h2></div>
-				<div class="header"><h2>{ "Kiegészítő" }</h2></div>
-				<div class="header"><h2>{ "Jellemzők" }</h2></div>
+				<div class="row">
+					<div class="header"><h2>{ "Név" }</h2></div>
+					<div class="header"><h2>{ "Kép" }</h2></div>
+					<div class="header"><h2>{ "Kiegészítő" }</h2></div>
+					<div class="header"><h2>{ "Jellemzők" }</h2></div>
+				</div>
 				{ for self.properties.maps.iter().map(Self::render_map) }
 			</div>
 		}
