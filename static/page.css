@@ -38,10 +38,11 @@ body
 	align-items: center;
 	display: flex;
 	flex-direction: column;
+	height: 105px;
 	width: 240px;
 }
 
-.table > .active-row
+.table > .show-row
 {
 	animation-delay: 0.0s, 0.25s;
 	animation-duration: 0.4s;
@@ -49,7 +50,7 @@ body
 	animation-name: scale-in, fade-in;
 }
 
-.table > .inactive-row
+.table > .hide-row
 {
 	animation-delay: 0.0s, 0.25s;
 	animation-duration: 0.4s;
@@ -62,11 +63,13 @@ body
 	from
 	{
 		height: 0px;
+		margin-bottom: -10px;
 	}
 
 	to
 	{
 		height: 105px;
+		margin-bottom: 0px;
 	}
 }
 
@@ -75,11 +78,13 @@ body
 	from
 	{
 		height: 105px;
+		margin-bottom: 0px;
 	}
 
 	to
 	{
 		height: 0px;
+		margin-bottom: -10px;
 	}
 }
 

@@ -12,13 +12,21 @@ use crate::data::
 	water_presence::WaterPresence,
 };
 
+#[derive(Clone, PartialEq)]
+pub enum State
+{
+	Default,
+	Visible,
+	Hidden,
+}
+
 #[derive(Properties, Clone)]
 pub struct MapProperties
 {
 	pub map_data: MapData,
 
-	#[prop_or(true)]
-	pub active: bool,
+	#[prop_or(State::Default)]
+	pub state: State,
 }
 
 pub struct Map
@@ -29,16 +37,18 @@ pub struct Map
 
 impl Map
 {
-	fn row_class(&self) -> &str
+	fn row_class(&self) -> String
 	{
-		if self.properties.active
+		let mut classes = vec!["row"];
+
+		match self.properties.state
 		{
-			"row active-row"
-		}
-		else
-		{
-			"row inactive-row"
-		}
+			State::Visible => classes.push("show-row"),
+			State::Hidden => classes.push("hide-row"),
+			_ => {},
+		};
+
+		classes.join(" ")
 	}
 
 	fn render_features(&self) -> Html
@@ -82,7 +92,15 @@ impl Component for Map
 		{
 			Message::WaterPresence(allowed_water_presence) =>
 			{
-				self.properties.active = allowed_water_presence.contains(&self.properties.map_data.water_presence);
+				let visible = allowed_water_presence.contains(&self.properties.map_data.water_presence);
+				if visible && (self.properties.state != State::Default)
+				{
+					self.properties.state = State::Visible;
+				}
+				else if !visible
+				{
+					self.properties.state = State::Hidden;
+				}
 			},
 		}
 
