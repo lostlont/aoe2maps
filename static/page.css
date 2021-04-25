@@ -3,6 +3,8 @@
 	--background-color: rgb(215, 215, 157);
 	--row-background-color: rgb(194, 194, 141);
 	--header-background-color: rgb(172, 172, 126);
+	--animation-duration: 0.4s;
+	--short-animation-delay: 0.25s;
 }
 
 body
@@ -20,8 +22,8 @@ body
 	max-width: 960px;
 	padding-right: 240px;
 	padding-top: initial;
-	transition-delay: 0.0s, 0.4s;
-	transition-duration: 0.4s;
+	transition-delay: 0s, var(--animation-duration);
+	transition-duration: var(--animation-duration);
 	transition-property: padding-right, padding-top;
 	transition-timing-function: ease-in-out;
 }
@@ -36,8 +38,8 @@ body
 	max-height: 140px;
 	opacity: 100%;
 	scale: 1.0 1.0;
-	transition-delay: 0.0s, 0.0s, 0.25s, 0.25s;
-	transition-duration: 0.4s;
+	transition-delay: 0s, 0s, var(--short-animation-delay), var(--short-animation-delay);
+	transition-duration: var(--animation-duration);
 	transition-property: margin-top, max-height, opacity, scale;
 	transition-timing-function: ease-in-out;
 }
@@ -73,8 +75,8 @@ body
 	overflow: hidden;
 	right: 0;
 	top: 0;
-	transition-delay: 0.4s, 0.0s;
-	transition-duration: 0.4s;
+	transition-delay: var(--animation-duration), 0s;
+	transition-duration: var(--animation-duration);
 	transition-property: height, width;
 	transition-timing-function: ease-in-out;
 	width: 240px;
@@ -121,13 +123,13 @@ h3
 	{
 		height: 40px;
 		width: 100%;
-		transition-delay: 0.0s, 0.4s;
+		transition-delay: 0s, var(--animation-duration);
 	}
 
 	.table
 	{
 		padding-top: 40px;
-		transition-delay: 0.0s, 0.0s;
+		transition-delay: 0, 0;
 	}
 }
 
@@ -147,7 +149,7 @@ h3
 	max-height: 0px;
 	opacity: 0%;
 	scale: 0.9 0.9;
-	transition-delay: 0.25s, 0.25s, 0.0s, 0.0s;
+	transition-delay: var(--short-animation-delay), var(--short-animation-delay), 0s, 0s;
 }
 
 .table > .row.hidden:not(:first-child)
