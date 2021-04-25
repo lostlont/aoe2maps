@@ -43,8 +43,7 @@ impl Map
 
 		match self.properties.state
 		{
-			State::Visible => classes.push("show-row"),
-			State::Hidden => classes.push("hide-row"),
+			State::Hidden => classes.push("hidden"),
 			_ => {},
 		};
 

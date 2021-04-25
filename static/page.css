@@ -33,6 +33,13 @@ body
 	box-shadow: 1px 3px 6px rgba(0, 0, 0, 0.25);
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr 1fr;
+	max-height: 140px;
+	opacity: 100%;
+	scale: 1.0 1.0;
+	transition-delay: 0.0s, 0.0s, 0.25s, 0.25s;
+	transition-duration: 0.4s;
+	transition-property: margin-top, max-height, opacity, scale;
+	transition-timing-function: ease-in-out;
 }
 
 .table > .row:not(:first-child)
@@ -55,82 +62,6 @@ body
 .table > .row img
 {
 	width: 100%;
-}
-
-.table > .show-row
-{
-	animation-delay: 0.0s, 0.25s;
-	animation-duration: 0.4s;
-	animation-fill-mode: both;
-	animation-name: scale-in, fade-in;
-}
-
-.table > .hide-row
-{
-	animation-delay: 0.0s, 0.25s;
-	animation-duration: 0.4s;
-	animation-fill-mode: both;
-	animation-name: fade-out, scale-out;
-}
-
-@keyframes scale-in
-{
-	from
-	{
-		height: 0px;
-		margin-top: 0px;
-	}
-
-	to
-	{
-		height: 105px;
-		margin-top: 10px;
-	}
-}
-
-@keyframes scale-out
-{
-	from
-	{
-		height: 105px;
-		margin-top: 10px;
-	}
-
-	to
-	{
-		height: 0px;
-		margin-top: 0px;
-	}
-}
-
-@keyframes fade-in
-{
-	from
-	{
-		opacity: 0%;
-		scale: 0.9 0.9;
-	}
-
-	to
-	{
-		opacity: 100%;
-		scale: 1.0 1.0;
-	}
-}
-
-@keyframes fade-out
-{
-	from
-	{
-		opacity: 100%;
-		scale: 1.0 1.0;
-	}
-
-	to
-	{
-		opacity: 0%;
-		scale: 0.9 0.9;
-	}
 }
 
 .menu
@@ -207,5 +138,19 @@ h3
 		grid-auto-flow: column;
 		grid-template-columns: 1fr 1fr;
 		grid-template-rows: auto auto;
+		max-height: 220px;
 	}
+}
+
+.table > .row.hidden
+{
+	max-height: 0px;
+	opacity: 0%;
+	scale: 0.9 0.9;
+	transition-delay: 0.25s, 0.25s, 0.0s, 0.0s;
+}
+
+.table > .row.hidden:not(:first-child)
+{
+	margin-top: 0px;
 }
