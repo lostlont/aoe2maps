@@ -199,3 +199,13 @@ h3
 		transition-delay: 0.0s, 0.0s;
 	}
 }
+
+@media (max-width: 632px)
+{
+	.table > .row
+	{
+		grid-auto-flow: column;
+		grid-template-columns: 1fr 1fr;
+		grid-template-rows: auto auto;
+	}
+}
