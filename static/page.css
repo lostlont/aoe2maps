@@ -37,6 +37,7 @@ body
 	grid-template-columns: 1fr 1fr 1fr 1fr;
 	max-height: 140px;
 	opacity: 100%;
+	overflow: hidden;
 	scale: 1.0 1.0;
 	transition-delay: 0s, 0s, var(--short-animation-delay), var(--short-animation-delay);
 	transition-duration: var(--animation-duration);
@@ -63,7 +64,7 @@ body
 
 .table > .row img
 {
-	width: 100%;
+	max-width: 100%;
 }
 
 .menu
