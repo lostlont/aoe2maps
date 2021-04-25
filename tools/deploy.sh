@@ -2,6 +2,5 @@
 
 TARGET_PATH="$1"
 
-echo id
-echo rm -Rf $TARGET_PATH/*
-echo cp build/* $TARGET_PATH/
+rm -Rf $TARGET_PATH/*
+cp build/* $TARGET_PATH/
