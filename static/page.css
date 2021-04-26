@@ -20,12 +20,21 @@ body
 	flex-direction: column;
 	margin: 8px auto;
 	max-width: 960px;
-	padding-right: 240px;
 	padding-top: initial;
 	transition-delay: 0s, var(--animation-duration);
 	transition-duration: var(--animation-duration);
 	transition-property: padding-right, padding-top;
 	transition-timing-function: ease-in-out;
+}
+
+.table.menu-open
+{
+	padding-right: 240px;
+}
+
+.table.menu-collapsed
+{
+	padding-right: 40px;
 }
 
 .table > .row
@@ -80,7 +89,16 @@ body
 	transition-duration: var(--animation-duration);
 	transition-property: height, width;
 	transition-timing-function: ease-in-out;
+}
+
+.menu.open
+{
 	width: 240px;
+}
+
+.menu.collapsed
+{
+	width: 40px;
 }
 
 h2
@@ -112,7 +130,12 @@ h3
 
 @media (max-width: 1232px)
 {
-	.table
+	.table.menu-open
+	{
+		padding-right: initial;
+	}
+
+	.table.menu-collapsed
 	{
 		padding-right: initial;
 	}
@@ -122,9 +145,19 @@ h3
 {
 	.menu
 	{
+		transition-delay: 0s, var(--animation-duration);
+	}
+
+	.menu.open
+	{
+		height: 50%;
+		width: 100%;
+	}
+
+	.menu.collapsed
+	{
 		height: 40px;
 		width: 100%;
-		transition-delay: 0s, var(--animation-duration);
 	}
 
 	.table

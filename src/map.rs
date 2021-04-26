@@ -63,6 +63,7 @@ impl Map
 
 pub enum Message
 {
+	None,
 	WaterPresence(HashSet<WaterPresence>),
 }
 
@@ -76,6 +77,7 @@ impl Component for Map
 		let callback = |request| match request
 		{
 			Request::WaterPresence(allowed_water_presence) => Message::WaterPresence(allowed_water_presence),
+			_ => Message::None,
 		};
 
 		Self
@@ -89,6 +91,7 @@ impl Component for Map
 	{
 		match message
 		{
+			Message::None => {},
 			Message::WaterPresence(allowed_water_presence) =>
 			{
 				let visible = allowed_water_presence.contains(&self.properties.map_data.water_presence);

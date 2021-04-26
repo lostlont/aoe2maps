@@ -10,8 +10,16 @@ use yew::worker::
 use crate::data::water_presence::WaterPresence;
 
 #[derive(Clone)]
+pub enum MenuState
+{
+	Open,
+	Collapsed,
+}
+
+#[derive(Clone)]
 pub enum Request
 {
+	SetMenuState(MenuState),
 	WaterPresence(HashSet<WaterPresence>),
 }
 

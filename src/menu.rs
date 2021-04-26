@@ -4,7 +4,7 @@ use yew::
 	prelude::*,
 	agent::Dispatcher,
 };
-use crate::agents::settings::{ Request, Settings };
+use crate::agents::settings::{ MenuState, Request, Settings };
 use crate::data::
 {
 	expansion_pack::ExpansionPack,
@@ -12,15 +12,40 @@ use crate::data::
 };
 use super::accordion::Accordion;
 
+#[derive(PartialEq)]
+pub enum State
+{
+	Open,
+	Collapsed,
+}
+
 pub struct Menu
 {
 	link: ComponentLink<Self>,
 	settings: Dispatcher<Settings>,
+	state: State,
 	allowed_water_presence: HashSet<WaterPresence>,
+}
+
+impl Menu
+{
+	fn class(&self) -> String
+	{
+		let mut classes = vec!["menu"];
+
+		match self.state
+		{
+			State::Open => classes.push("open"),
+			State::Collapsed => classes.push("collapsed"),
+		};
+
+		classes.join(" ")
+	}
 }
 
 pub enum Message
 {
+	ToggleState,
 	ToggleWaterPresence(WaterPresence),
 }
 
@@ -35,6 +60,7 @@ impl Component for Menu
 		{
 			link,
 			settings: Settings::dispatcher(),
+			state: State::Open,
 			allowed_water_presence: vec![
 				WaterPresence::None,
 				WaterPresence::Some,
@@ -47,6 +73,23 @@ impl Component for Menu
 	{
 		match message
 		{
+			Message::ToggleState =>
+			{
+				self.state = match self.state
+				{
+					State::Open => State::Collapsed,
+					State::Collapsed => State::Open,
+				};
+
+				let menu_state = match self.state
+				{
+					State::Open => MenuState::Open,
+					State::Collapsed => MenuState::Collapsed,
+				};
+				self.settings.send(Request::SetMenuState(menu_state));
+
+				true
+			},
 			Message::ToggleWaterPresence(water_presence) =>
 			{
 				self.allowed_water_presence = &self.allowed_water_presence ^ &vec![water_presence].into_iter().collect();
@@ -65,7 +108,11 @@ impl Component for Menu
 	{
 		html!
 		{
-			<div class="menu">
+			<div class=self.class()>
+				<button
+					onclick=self.link.callback(|_| Message::ToggleState)>
+					{ "Hamburger" }
+				</button>
 				<Accordion title="Kiegészítő">
 					<div>{ ExpansionPack::TheAgeOfKings }</div>
 					<div>{ ExpansionPack::TheConquerors }</div>
