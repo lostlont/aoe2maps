@@ -85,25 +85,29 @@ body
 	overflow: hidden;
 	right: 0;
 	top: 0;
-	transition-delay: var(--animation-duration), 0s;
+	transition-delay: var(--animation-duration), 0s, 0s;
 	transition-duration: var(--animation-duration);
-	transition-property: height, width;
+	transition-property: height, width, right;
 	transition-timing-function: ease-in-out;
+	width: 240px;
 }
 
 .menu .content
 {
-	transition: margin-left ease-in-out var(--animation-duration);
+	transition-delay: 0s;
+	transition-duration: var(--animation-duration);
+	transition-property: margin-left;
+	transition-timing-function: ease-in-out;
 }
 
 .menu.open
 {
-	width: 240px;
+	right: 0;
 }
 
 .menu.collapsed
 {
-	width: 40px;
+	right: -200px;
 }
 
 .menu.collapsed .content
@@ -187,19 +191,25 @@ h3
 {
 	.menu
 	{
-		transition-delay: 0s, var(--animation-duration);
+		right: 0;
+		transition-delay: 0s, var(--animation-duration), var(--animation-duration);
+		width: 100%;
+	}
+
+	.menu .content
+	{
+		transition-delay: var(--animation-duration);
 	}
 
 	.menu.open
 	{
 		height: 50%;
-		width: 100%;
 	}
 
 	.menu.collapsed
 	{
 		height: 40px;
-		width: 100%;
+		right: 0;
 	}
 
 	.menu.collapsed .content
