@@ -91,6 +91,11 @@ body
 	transition-timing-function: ease-in-out;
 }
 
+.menu .content
+{
+	transition: margin-left ease-in-out var(--animation-duration);
+}
+
 .menu.open
 {
 	width: 240px;
@@ -99,6 +104,11 @@ body
 .menu.collapsed
 {
 	width: 40px;
+}
+
+.menu.collapsed .content
+{
+	margin-left: 40px;
 }
 
 h2
@@ -131,7 +141,7 @@ h3
 .hamburger
 {
 	background-color: var(--header-background-color);
-	grid-template-columns: 0px 0fr 0;
+	grid-template-columns: 4px 0fr 0;
 	justify-items: center;
 	transition-delay: 0s;
 	transition-duration: var(--animation-duration);
@@ -190,6 +200,11 @@ h3
 	{
 		height: 40px;
 		width: 100%;
+	}
+
+	.menu.collapsed .content
+	{
+		margin-left: initial;
 	}
 
 	.table

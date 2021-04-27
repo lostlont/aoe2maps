@@ -118,40 +118,42 @@ impl Component for Menu
 			<div class=self.class()>
 				<Hamburger
 					clicked=self.link.callback(|_| Message::ToggleState) />
-				<Accordion title="Kiegészítő">
-					<div>{ ExpansionPack::TheAgeOfKings }</div>
-					<div>{ ExpansionPack::TheConquerors }</div>
-					<div>{ ExpansionPack::TheForgotten }</div>
-					<div>{ ExpansionPack::TheAfricanKingdoms }</div>
-					<div>{ ExpansionPack::RiseOfTheRajas }</div>
-					<div>{ ExpansionPack::TheLastKhans }</div>
-				</Accordion>
-				<Accordion title="Víz mennyisége">
-					<label>
-						<input
-							type="checkbox"
-							value=WaterPresence::None
-							checked=self.allowed_water_presence.contains(&WaterPresence::None)
-							onclick=self.link.callback(|_| Message::ToggleWaterPresence(WaterPresence::None)) />
-						{ WaterPresence::None }
-					</label>
-					<label>
-						<input
-							type="checkbox"
-							value=WaterPresence::Some
-							checked=self.allowed_water_presence.contains(&WaterPresence::Some)
-							onclick=self.link.callback(|_| Message::ToggleWaterPresence(WaterPresence::Some)) />
-						{ WaterPresence::Some }
-					</label>
-					<label>
-						<input
-							type="checkbox"
-							value=WaterPresence::Islands
-							checked=self.allowed_water_presence.contains(&WaterPresence::Islands)
-							onclick=self.link.callback(|_| Message::ToggleWaterPresence(WaterPresence::Islands)) />
-						{ WaterPresence::Islands }
-					</label>
-				</Accordion>
+				<div class="content">
+					<Accordion title="Kiegészítő">
+						<div>{ ExpansionPack::TheAgeOfKings }</div>
+						<div>{ ExpansionPack::TheConquerors }</div>
+						<div>{ ExpansionPack::TheForgotten }</div>
+						<div>{ ExpansionPack::TheAfricanKingdoms }</div>
+						<div>{ ExpansionPack::RiseOfTheRajas }</div>
+						<div>{ ExpansionPack::TheLastKhans }</div>
+					</Accordion>
+					<Accordion title="Víz mennyisége">
+						<label>
+							<input
+								type="checkbox"
+								value=WaterPresence::None
+								checked=self.allowed_water_presence.contains(&WaterPresence::None)
+								onclick=self.link.callback(|_| Message::ToggleWaterPresence(WaterPresence::None)) />
+							{ WaterPresence::None }
+						</label>
+						<label>
+							<input
+								type="checkbox"
+								value=WaterPresence::Some
+								checked=self.allowed_water_presence.contains(&WaterPresence::Some)
+								onclick=self.link.callback(|_| Message::ToggleWaterPresence(WaterPresence::Some)) />
+							{ WaterPresence::Some }
+						</label>
+						<label>
+							<input
+								type="checkbox"
+								value=WaterPresence::Islands
+								checked=self.allowed_water_presence.contains(&WaterPresence::Islands)
+								onclick=self.link.callback(|_| Message::ToggleWaterPresence(WaterPresence::Islands)) />
+							{ WaterPresence::Islands }
+						</label>
+					</Accordion>
+				</div>
 			</div>
 		}
 	}
