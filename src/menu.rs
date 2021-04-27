@@ -4,14 +4,20 @@ use yew::
 	prelude::*,
 	agent::Dispatcher,
 };
-use crate::agents::settings::{ MenuState, Request, Settings };
-use crate::data::
+use crate::
 {
-	expansion_pack::ExpansionPack,
-	water_presence::WaterPresence,
+	agents::settings::{ MenuState, Request, Settings },
+	data::
+	{
+		expansion_pack::ExpansionPack,
+		water_presence::WaterPresence,
+	},
+	utils::
+	{
+		hamburger::Hamburger,
+		accordion::Accordion,
+	},
 };
-use crate::utils::hamburger::Hamburger;
-use super::accordion::Accordion;
 
 #[derive(PartialEq)]
 pub enum State
