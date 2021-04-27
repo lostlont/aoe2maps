@@ -128,6 +128,38 @@ h3
 	flex-direction: column;
 }
 
+.hamburger
+{
+	background-color: var(--header-background-color);
+	grid-template-columns: 0px 0fr 0;
+	justify-items: center;
+	transition-delay: 0s;
+	transition-duration: var(--animation-duration);
+	transition-property: grid-template-columns;
+	transition-timing-function: ease-in-out;
+	width: 100%;
+}
+
+.hamburger::before
+{
+	content: '';
+}
+
+.hamburger::after
+{
+	content: '';
+}
+
+.hamburger:hover
+{
+	background-color: var(--row-background-color);
+}
+
+.hamburger line
+{
+	stroke: rgb(86, 86, 70);
+}
+
 @media (max-width: 1232px)
 {
 	.table.menu-open
@@ -164,6 +196,12 @@ h3
 	{
 		padding-top: 40px;
 		transition-delay: 0, 0;
+	}
+
+	.hamburger
+	{
+		grid-template-columns: 0px 1fr 0;
+		transition-delay: var(--animation-duration);
 	}
 }
 

@@ -1,9 +1,10 @@
 .hamburger
 {
 	align-items: center;
+	border: 0;
+	cursor: pointer;
 	display: grid;
 	height: 40px;
-	justify-items: center;
 	padding: 0;
 	width: 40px;
 }
@@ -16,7 +17,6 @@
 
 .hamburger line
 {
-	stroke: black;
 	stroke-linecap: round;
 	stroke-width: 4px;
 }
