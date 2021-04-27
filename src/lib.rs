@@ -10,6 +10,7 @@ mod map;
 mod menu;
 mod page;
 mod table;
+mod utils;
 
 use data::create_maps;
 use page::Page;

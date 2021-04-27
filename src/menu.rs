@@ -10,6 +10,7 @@ use crate::data::
 	expansion_pack::ExpansionPack,
 	water_presence::WaterPresence,
 };
+use crate::utils::hamburger::Hamburger;
 use super::accordion::Accordion;
 
 #[derive(PartialEq)]
@@ -109,10 +110,8 @@ impl Component for Menu
 		html!
 		{
 			<div class=self.class()>
-				<button
-					onclick=self.link.callback(|_| Message::ToggleState)>
-					{ "Hamburger" }
-				</button>
+				<Hamburger
+					clicked=self.link.callback(|_| Message::ToggleState) />
 				<Accordion title="Kiegészítő">
 					<div>{ ExpansionPack::TheAgeOfKings }</div>
 					<div>{ ExpansionPack::TheConquerors }</div>
