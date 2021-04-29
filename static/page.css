@@ -1,8 +1,11 @@
 :root
 {
-	--background-color: rgb(215, 215, 157);
-	--row-background-color: rgb(194, 194, 141);
-	--header-background-color: rgb(172, 172, 126);
+	--background-color: rgb(242, 225, 181);
+	--row-background-color: rgb(224, 207, 164);
+	--header-background-color: rgb(206, 190, 147);
+	--dark-foreground-color: rgb(96, 83, 48);
+	--shadow-color: rgba(0, 0, 0, 0.25);
+	--light-shadow-color: rgba(0, 0, 0, 0.1);
 	--animation-duration: 0.4s;
 	--short-animation-delay: 0.25s;
 }
@@ -41,7 +44,7 @@ body
 {
 	align-items: center;
 	background-color: var(--row-background-color);
-	box-shadow: 1px 3px 6px rgba(0, 0, 0, 0.25);
+	box-shadow: 1px 3px 6px var(--shadow-color);
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr 1fr;
 	max-height: 140px;
@@ -79,7 +82,7 @@ body
 .menu
 {
 	background-color: var(--header-background-color);
-	box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.25);
+	box-shadow: 0px 0px 6px var(--shadow-color);
 	position: fixed;
 	height: 100%;
 	overflow: hidden;
@@ -137,7 +140,7 @@ h3
 
 .accordion > div
 {
-	box-shadow: 0px 12px 12px -12px rgba(0, 0, 0, 0.1) inset;
+	box-shadow: 0px 12px 12px -12px var(--light-shadow-color) inset;
 	display: flex;
 	flex-direction: column;
 }
@@ -171,7 +174,7 @@ h3
 
 .hamburger line
 {
-	stroke: rgb(86, 86, 70);
+	stroke: var(--dark-foreground-color);
 }
 
 @media (max-width: 1232px)
