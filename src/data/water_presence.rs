@@ -1,13 +1,9 @@
 use std::
 {
-	fmt::
-	{
-		Display,
-		Error,
-		Formatter,
-	},
+	fmt::{ Display, Error, Formatter },
 	result::Result,
 };
+use super::map_attribute::MapAttribute;
 
 #[derive(Clone, Eq, Hash, PartialEq)]
 pub enum WaterPresence
@@ -15,6 +11,10 @@ pub enum WaterPresence
 	None,
 	Some,
 	Islands,
+}
+
+impl MapAttribute for WaterPresence
+{
 }
 
 impl Display for WaterPresence

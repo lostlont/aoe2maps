@@ -1,6 +1,6 @@
 use yew::prelude::*;
 
-use crate::agents::settings::{ MenuState, Request, Settings };
+use crate::agents::settings::{ MenuState, Response, Settings };
 use crate::data::map_data::MapData;
 use super::map::Map;
 
@@ -54,9 +54,9 @@ impl Component for Table
 
 	fn create(properties: Self::Properties, link: ComponentLink<Self>) -> Self
 	{
-		let callback = |request| match request
+		let callback = |response| match response
 		{
-			Request::SetMenuState(menu_state) => Message::SetMenuState(menu_state),
+			Response::MenuStateChanged(menu_state) => Message::SetMenuState(menu_state),
 			_ => Message::None,
 		};
 

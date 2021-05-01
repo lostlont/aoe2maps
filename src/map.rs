@@ -1,15 +1,21 @@
-use std::collections::HashSet;
+use std::
+{
+	cell::RefCell,
+	rc::Rc,
+};
 use yew::
 {
 	prelude::*,
 	Properties,
 };
-
-use crate::agents::settings::{ Request, Settings };
-use crate::data::
+use crate::
 {
-	map_data::MapData,
-	water_presence::WaterPresence,
+	agents::
+	{
+		filter::FilterView,
+		settings::{ Response, Settings },
+	},
+	data::map_data::MapData,
 };
 
 #[derive(Clone, PartialEq)]
@@ -64,7 +70,7 @@ impl Map
 pub enum Message
 {
 	None,
-	WaterPresence(HashSet<WaterPresence>),
+	FilterChanged(Rc<RefCell<dyn FilterView>>),
 }
 
 impl Component for Map
@@ -74,9 +80,9 @@ impl Component for Map
 
 	fn create(properties: Self::Properties, link: ComponentLink<Self>) -> Self
 	{
-		let callback = |request| match request
+		let callback = |response| match response
 		{
-			Request::WaterPresence(allowed_water_presence) => Message::WaterPresence(allowed_water_presence),
+			Response::FilterChanged(filter) => Message::FilterChanged(filter),
 			_ => Message::None,
 		};
 
@@ -92,9 +98,9 @@ impl Component for Map
 		match message
 		{
 			Message::None => {},
-			Message::WaterPresence(allowed_water_presence) =>
+			Message::FilterChanged(filter) =>
 			{
-				let visible = allowed_water_presence.contains(&self.properties.map_data.water_presence);
+				let visible = filter.borrow().is_allowed(&self.properties.map_data);
 				if visible && (self.properties.state != State::Default)
 				{
 					self.properties.state = State::Visible;

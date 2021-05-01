@@ -1,4 +1,8 @@
-use std::collections::HashSet;
+use std::
+{
+	cell::RefCell,
+	rc::Rc,
+};
 use yew::
 {
 	prelude::*,
@@ -6,7 +10,11 @@ use yew::
 };
 use crate::
 {
-	agents::settings::{ MenuState, Request, Settings },
+	agents::
+	{
+		filter::{ Filter, FilterView },
+		settings::{ MenuState, Request, Settings },
+	},
 	data::
 	{
 		expansion_pack::ExpansionPack,
@@ -31,7 +39,7 @@ pub struct Menu
 	link: ComponentLink<Self>,
 	settings: Dispatcher<Settings>,
 	state: State,
-	allowed_water_presence: HashSet<WaterPresence>,
+	filter: Rc<RefCell<Filter>>,
 }
 
 impl Menu
@@ -68,11 +76,7 @@ impl Component for Menu
 			link,
 			settings: Settings::dispatcher(),
 			state: State::Open,
-			allowed_water_presence: vec![
-				WaterPresence::None,
-				WaterPresence::Some,
-				WaterPresence::Islands,
-			].into_iter().collect(),
+			filter: Rc::new(RefCell::new(Filter::new())),
 		}
 	}
 
@@ -99,8 +103,9 @@ impl Component for Menu
 			},
 			Message::ToggleWaterPresence(water_presence) =>
 			{
-				self.allowed_water_presence = &self.allowed_water_presence ^ &vec![water_presence].into_iter().collect();
-				self.settings.send(Request::WaterPresence(self.allowed_water_presence.clone()));
+				self.filter.borrow_mut().toggle(water_presence);
+				self.settings.send(Request::FilterChanged(self.filter.clone()));
+
 				false
 			},
 		}
@@ -132,7 +137,7 @@ impl Component for Menu
 							<input
 								type="checkbox"
 								value=WaterPresence::None
-								checked=self.allowed_water_presence.contains(&WaterPresence::None)
+								checked=self.filter.borrow().allowed_water_presence().contains(&WaterPresence::None)
 								onclick=self.link.callback(|_| Message::ToggleWaterPresence(WaterPresence::None)) />
 							{ WaterPresence::None }
 						</label>
@@ -140,7 +145,7 @@ impl Component for Menu
 							<input
 								type="checkbox"
 								value=WaterPresence::Some
-								checked=self.allowed_water_presence.contains(&WaterPresence::Some)
+								checked=self.filter.borrow().allowed_water_presence().contains(&WaterPresence::Some)
 								onclick=self.link.callback(|_| Message::ToggleWaterPresence(WaterPresence::Some)) />
 							{ WaterPresence::Some }
 						</label>
@@ -148,7 +153,7 @@ impl Component for Menu
 							<input
 								type="checkbox"
 								value=WaterPresence::Islands
-								checked=self.allowed_water_presence.contains(&WaterPresence::Islands)
+								checked=self.filter.borrow().allowed_water_presence().contains(&WaterPresence::Islands)
 								onclick=self.link.callback(|_| Message::ToggleWaterPresence(WaterPresence::Islands)) />
 							{ WaterPresence::Islands }
 						</label>
