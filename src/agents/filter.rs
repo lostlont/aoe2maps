@@ -1,12 +1,15 @@
 // TODO Move to data?
-use std::iter::FromIterator;
-use crate::
+use
 {
-	data::
+	std::iter::FromIterator,
+	crate::
 	{
-		map_attribute_set::MapAttributeSet,
-		map_data::MapData,
-		water_presence::WaterPresence,
+		data::
+		{
+			map_attribute_set::MapAttributeSet,
+			map_data::MapData,
+			water_presence::WaterPresence,
+		},
 	},
 };
 

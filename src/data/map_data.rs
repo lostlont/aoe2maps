@@ -1,5 +1,8 @@
-use super::expansion_pack::ExpansionPack;
-use super::water_presence::WaterPresence;
+use super::
+{
+	expansion_pack::ExpansionPack,
+	water_presence::WaterPresence,
+};
 
 #[derive(Clone)]
 pub struct MapData

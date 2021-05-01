@@ -1,9 +1,12 @@
-use std::
+use
 {
-	fmt::{ Display, Error, Formatter },
-	result::Result,
+	std::
+	{
+		fmt::{ Display, Error, Formatter },
+		result::Result,
+	},
+	super::map_attribute::MapAttribute,
 };
-use super::map_attribute::MapAttribute;
 
 #[derive(Clone, Eq, Hash, PartialEq)]
 pub enum WaterPresence

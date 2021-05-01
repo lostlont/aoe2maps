@@ -1,29 +1,32 @@
-use std::
+use
 {
-	cell::RefCell,
-	rc::Rc,
-};
-use yew::
-{
-	prelude::*,
-	agent::Dispatcher,
-};
-use crate::
-{
-	agents::
+	std::
 	{
-		filter::{ Filter, FilterView },
-		settings::{ MenuState, Request, Settings },
+		cell::RefCell,
+		rc::Rc,
 	},
-	data::
+	yew::
 	{
-		expansion_pack::ExpansionPack,
-		water_presence::WaterPresence,
+		prelude::*,
+		agent::Dispatcher,
 	},
-	utils::
+	crate::
 	{
-		hamburger::Hamburger,
-		accordion::Accordion,
+		agents::
+		{
+			filter::{ Filter, FilterView },
+			settings::{ MenuState, Request, Settings },
+		},
+		data::
+		{
+			expansion_pack::ExpansionPack,
+			water_presence::WaterPresence,
+		},
+		utils::
+		{
+			hamburger::Hamburger,
+			accordion::Accordion,
+		},
 	},
 };
 

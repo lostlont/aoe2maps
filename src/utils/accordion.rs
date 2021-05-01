@@ -1,5 +1,8 @@
-use yew::prelude::*;
-use web_sys::HtmlElement;
+use
+{
+	yew::prelude::*,
+	web_sys::HtmlElement,
+};
 
 #[derive(Properties, Clone)]
 pub struct AccordionProperties

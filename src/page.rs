@@ -1,8 +1,13 @@
-use yew::prelude::*;
-
-use crate::data::map_data::MapData;
-use super::table::Table;
-use super::menu::Menu;
+use
+{
+	yew::prelude::*,
+	crate::data::map_data::MapData,
+	super::
+	{
+		table::Table,
+		menu::Menu,
+	},
+};
 
 #[derive(Properties, Clone)]
 pub struct PageProperties

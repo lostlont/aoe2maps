@@ -1,21 +1,24 @@
-use std::
+use
 {
-	cell::RefCell,
-	rc::Rc,
-};
-use yew::
-{
-	prelude::*,
-	Properties,
-};
-use crate::
-{
-	agents::
+	std::
 	{
-		filter::FilterView,
-		settings::{ Response, Settings },
+		cell::RefCell,
+		rc::Rc,
 	},
-	data::map_data::MapData,
+	yew::
+	{
+		prelude::*,
+		Properties,
+	},
+	crate::
+	{
+		agents::
+		{
+			filter::FilterView,
+			settings::{ Response, Settings },
+		},
+		data::map_data::MapData,
+	},
 };
 
 #[derive(Clone, PartialEq)]

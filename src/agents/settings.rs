@@ -1,11 +1,14 @@
-use std::
+use
 {
-	cell::RefCell,
-	collections::HashSet,
-	rc::Rc,
+	std::
+	{
+		cell::RefCell,
+		collections::HashSet,
+		rc::Rc,
+	},
+	yew::worker::{ Agent, AgentLink, Context, HandlerId },
+	crate::agents::filter::FilterView,
 };
-use yew::worker::{ Agent, AgentLink, Context, HandlerId };
-use crate::agents::filter::FilterView;
 
 #[derive(Clone)]
 pub enum MenuState

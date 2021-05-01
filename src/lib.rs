@@ -1,7 +1,16 @@
 #![recursion_limit = "1024"]
 
-use wasm_bindgen::prelude::*;
-use yew::prelude::*;
+use
+{
+	wasm_bindgen::prelude::*,
+	yew::prelude::*,
+	data::create_maps,
+	page::
+	{
+		Page,
+		PageProperties,
+	},
+};
 
 mod agents;
 mod data;
@@ -10,10 +19,6 @@ mod menu;
 mod page;
 mod table;
 mod utils;
-
-use data::create_maps;
-use page::Page;
-use page::PageProperties;
 
 #[wasm_bindgen(start)]
 pub fn run_app()

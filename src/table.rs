@@ -1,8 +1,13 @@
-use yew::prelude::*;
-
-use crate::agents::settings::{ MenuState, Response, Settings };
-use crate::data::map_data::MapData;
-use super::map::Map;
+use
+{
+	yew::prelude::*,
+	crate::
+	{
+		agents::settings::{ MenuState, Response, Settings },
+		data::map_data::MapData,
+	},
+	super::map::Map,
+};
 
 #[derive(Properties, Clone)]
 pub struct TableProperties

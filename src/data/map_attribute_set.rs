@@ -1,9 +1,12 @@
-use std::
+use
 {
-	collections::HashSet,
-	iter::FromIterator,
+	std::
+	{
+		collections::HashSet,
+		iter::FromIterator,
+	},
+	super::map_attribute::MapAttribute,
 };
-use super::map_attribute::MapAttribute;
 
 pub struct MapAttributeSet<T>
 where

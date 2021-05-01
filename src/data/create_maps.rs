@@ -1,6 +1,9 @@
-use super::expansion_pack::ExpansionPack;
-use super::map_data::MapData;
-use super::water_presence::WaterPresence;
+use super::
+{
+	expansion_pack::ExpansionPack,
+	map_data::MapData,
+	water_presence::WaterPresence,
+};
 
 pub fn create_maps() -> Vec<MapData>
 {
