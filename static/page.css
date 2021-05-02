@@ -256,3 +256,14 @@ h3
 {
 	margin-top: 0px;
 }
+
+.menu label
+{
+	cursor: pointer;
+	padding: 4px 0;
+}
+
+.menu label:hover
+{
+	background-color: var(--row-background-color);
+}
