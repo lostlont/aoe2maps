@@ -1,15 +1,14 @@
-use std::
+use
 {
-	fmt::
+	std::
 	{
-		Display,
-		Error,
-		Formatter,
+		fmt::{ Display, Error, Formatter },
+		result::Result,
 	},
-	result::Result,
+	super::MapAttribute,
 };
 
-#[derive(Clone)]
+#[derive(Clone, Eq, Hash, PartialEq)]
 pub enum ExpansionPack
 {
 	TheAgeOfKings,
@@ -34,6 +33,10 @@ impl ExpansionPack
 			ExpansionPack::TheLastKhans => "The Last Khans",
 		}
 	}
+}
+
+impl MapAttribute for ExpansionPack
+{
 }
 
 impl Display for ExpansionPack

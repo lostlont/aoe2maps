@@ -17,11 +17,7 @@ use
 			filter::{ Filter, FilterView },
 			settings::{ MenuState, Request, Settings },
 		},
-		data::
-		{
-			expansion_pack::ExpansionPack,
-			water_presence::WaterPresence,
-		},
+		data::map_attribute::{ ExpansionPack, WaterPresence },
 		utils::
 		{
 			hamburger::Hamburger,

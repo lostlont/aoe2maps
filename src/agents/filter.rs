@@ -6,9 +6,9 @@ use
 	{
 		data::
 		{
+			map_attribute::WaterPresence,
 			map_attribute_set::MapAttributeSet,
 			map_data::MapData,
-			water_presence::WaterPresence,
 		},
 	},
 };

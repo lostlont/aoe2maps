@@ -5,7 +5,7 @@ use
 		fmt::{ Display, Error, Formatter },
 		result::Result,
 	},
-	super::map_attribute::MapAttribute,
+	super::MapAttribute,
 };
 
 #[derive(Clone, Eq, Hash, PartialEq)]

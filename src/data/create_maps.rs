@@ -1,8 +1,7 @@
 use super::
 {
-	expansion_pack::ExpansionPack,
+	map_attribute::{ ExpansionPack, WaterPresence },
 	map_data::MapData,
-	water_presence::WaterPresence,
 };
 
 pub fn create_maps() -> Vec<MapData>
