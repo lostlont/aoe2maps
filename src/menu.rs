@@ -14,10 +14,11 @@ use
 	{
 		agents::
 		{
-			filter::{ Filter, FilterView },
+			filter::Filter,
 			settings::{ MenuState, Request, Settings },
 		},
-		data::map_attribute::{ ExpansionPack, WaterPresence },
+		data::map_attribute::ExpansionPack,
+		map_attribute_set_filter::MapAttributeSetFilter,
 		utils::
 		{
 			hamburger::Hamburger,
@@ -60,7 +61,6 @@ impl Menu
 pub enum Message
 {
 	ToggleState,
-	ToggleWaterPresence(WaterPresence),
 }
 
 impl Component for Menu
@@ -100,13 +100,6 @@ impl Component for Menu
 
 				true
 			},
-			Message::ToggleWaterPresence(water_presence) =>
-			{
-				self.filter.borrow_mut().toggle(water_presence);
-				self.settings.send(Request::FilterChanged(self.filter.clone()));
-
-				false
-			},
 		}
 	}
 
@@ -131,32 +124,9 @@ impl Component for Menu
 						<div>{ ExpansionPack::RiseOfTheRajas }</div>
 						<div>{ ExpansionPack::TheLastKhans }</div>
 					</Accordion>
-					<Accordion title="Víz mennyisége">
-						<label>
-							<input
-								type="checkbox"
-								value=WaterPresence::None
-								checked=self.filter.borrow().allowed_water_presence().contains(&WaterPresence::None)
-								onclick=self.link.callback(|_| Message::ToggleWaterPresence(WaterPresence::None)) />
-							{ WaterPresence::None }
-						</label>
-						<label>
-							<input
-								type="checkbox"
-								value=WaterPresence::Some
-								checked=self.filter.borrow().allowed_water_presence().contains(&WaterPresence::Some)
-								onclick=self.link.callback(|_| Message::ToggleWaterPresence(WaterPresence::Some)) />
-							{ WaterPresence::Some }
-						</label>
-						<label>
-							<input
-								type="checkbox"
-								value=WaterPresence::Islands
-								checked=self.filter.borrow().allowed_water_presence().contains(&WaterPresence::Islands)
-								onclick=self.link.callback(|_| Message::ToggleWaterPresence(WaterPresence::Islands)) />
-							{ WaterPresence::Islands }
-						</label>
-					</Accordion>
+					<MapAttributeSetFilter
+						title="Víz mennyisége"
+						filter=self.filter.clone() />
 				</div>
 			</div>
 		}

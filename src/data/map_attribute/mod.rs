@@ -2,6 +2,7 @@ use std::
 {
 	cmp::Eq,
 	hash::Hash,
+	slice::Iter,
 };
 
 mod expansion_pack;
@@ -12,6 +13,9 @@ pub use
 	water_presence::WaterPresence,
 };
 
-pub trait MapAttribute : Eq + Hash
+pub trait MapAttribute : Clone + Eq + Hash + 'static
+where
+	Self: Sized,
 {
+	fn values() -> Iter<'static, Self>;
 }

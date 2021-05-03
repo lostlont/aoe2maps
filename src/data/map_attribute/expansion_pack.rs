@@ -4,6 +4,7 @@ use
 	{
 		fmt::{ Display, Error, Formatter },
 		result::Result,
+		slice::Iter,
 	},
 	super::MapAttribute,
 };
@@ -37,6 +38,18 @@ impl ExpansionPack
 
 impl MapAttribute for ExpansionPack
 {
+	fn values() -> Iter<'static, ExpansionPack>
+	{
+		static VALUES: [ExpansionPack; 6] = [
+			ExpansionPack::TheAgeOfKings,
+			ExpansionPack::TheConquerors,
+			ExpansionPack::TheForgotten,
+			ExpansionPack::TheAfricanKingdoms,
+			ExpansionPack::RiseOfTheRajas,
+			ExpansionPack::TheLastKhans,
+		];
+		VALUES.iter()
+	}
 }
 
 impl Display for ExpansionPack

@@ -4,6 +4,7 @@ use
 	{
 		fmt::{ Display, Error, Formatter },
 		result::Result,
+		slice::Iter,
 	},
 	super::MapAttribute,
 };
@@ -18,6 +19,15 @@ pub enum WaterPresence
 
 impl MapAttribute for WaterPresence
 {
+	fn values() -> Iter<'static, WaterPresence>
+	{
+		static VALUES: [WaterPresence; 3] = [
+			WaterPresence::None,
+			WaterPresence::Some,
+			WaterPresence::Islands,
+		];
+		VALUES.iter()
+	}
 }
 
 impl Display for WaterPresence

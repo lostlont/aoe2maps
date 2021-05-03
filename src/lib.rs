@@ -15,6 +15,8 @@ use
 mod agents;
 mod data;
 mod map;
+mod map_attribute_filter;
+mod map_attribute_set_filter;
 mod menu;
 mod page;
 mod table;
