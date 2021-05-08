@@ -19,11 +19,7 @@ use
 		},
 		data::map_attribute::{ ExpansionPack, WaterPresence },
 		map_attribute_set_filter::MapAttributeSetFilter,
-		utils::
-		{
-			hamburger::Hamburger,
-			accordion::Accordion,
-		},
+		utils::hamburger::Hamburger,
 	},
 };
 
@@ -122,14 +118,10 @@ impl Component for Menu
 				<Hamburger
 					clicked=self.link.callback(|_| Message::ToggleState) />
 				<div class="content">
-					<Accordion title="Kiegészítő">
-						<div>{ ExpansionPack::TheAgeOfKings }</div>
-						<div>{ ExpansionPack::TheConquerors }</div>
-						<div>{ ExpansionPack::TheForgotten }</div>
-						<div>{ ExpansionPack::TheAfricanKingdoms }</div>
-						<div>{ ExpansionPack::RiseOfTheRajas }</div>
-						<div>{ ExpansionPack::TheLastKhans }</div>
-					</Accordion>
+					<MapAttributeSetFilter<ExpansionPack>
+						title="Kiegészítő"
+						map_attribute_set=self.filter.borrow().expansion_pack()
+						changed=self.link.callback(|_| Message::ChangedMapAttribute) />
 					<MapAttributeSetFilter<WaterPresence>
 						title="Víz mennyisége"
 						map_attribute_set=self.filter.borrow().water_presence()
