@@ -49,8 +49,10 @@ impl Component for Hamburger
 	{
 		html!
 		{
-			<button class="hamburger"
-				onclick=self.link.callback(|_| Message::Clicked)>
+			<button
+				class="hamburger"
+				onclick=self.link.callback(|_| Message::Clicked)
+			>
 				<svg>
 					<line x1="6" y1="6" x2="26" y2="6" />
 					<line x1="6" y1="16" x2="26" y2="16" />

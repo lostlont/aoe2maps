@@ -66,7 +66,8 @@ impl Component for MapAttributeFilter
 				<input
 					type="checkbox"
 					checked=self.properties.is_allowed
-					onclick=self.link.callback(|_| Message::ToggleAllowed) />
+					onclick=self.link.callback(|_| Message::ToggleAllowed)
+				/>
 				{ &self.properties.name }
 			</label>
 		}

@@ -113,15 +113,15 @@ impl Component for Accordion
 		html!
 		{
 			<div class="accordion">
-				<button
-					onclick=self.link.callback(|_| Message::Toggle)>
+				<button onclick=self.link.callback(|_| Message::Toggle)>
 					{ self.button_icon() }
 					{ "\u{00A0}" }
 					{ &self.properties.title }
 				</button>
 				<div
 					ref=self.node_ref.clone()
-					class=self.content_class()>
+					class=self.content_class()
+				>
 					{ self.properties.children.clone() }
 				</div>
 			</div>

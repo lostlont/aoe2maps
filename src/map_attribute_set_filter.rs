@@ -118,7 +118,8 @@ where
 						<MapAttributeFilter
 							name=format!("{}", attribute_value)
 							is_allowed=self.properties.map_attribute_set.borrow().contains(&attribute_value)
-							toggled=self.link.callback(move |is_allowed| Message::Toggled(attribute_value.clone(), is_allowed)) />
+							toggled=self.link.callback(move |is_allowed| Message::Toggled(attribute_value.clone(), is_allowed))
+						/>
 					})
 			}
 			</Accordion>

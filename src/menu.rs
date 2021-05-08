@@ -115,9 +115,7 @@ impl Component for Menu
 		html!
 		{
 			<div class=self.class()>
-				<Hamburger
-					clicked=self.link.callback(|_| Message::ToggleState)
-				/>
+				<Hamburger clicked=self.link.callback(|_| Message::ToggleState) />
 				<div class="content">
 					<MapAttributeSetFilter<ExpansionPack>
 						title="Kiegészítő"
