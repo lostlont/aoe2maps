@@ -17,7 +17,7 @@ use
 			filter::Filter,
 			settings::{ MenuState, Request, Settings },
 		},
-		data::map_attribute::ExpansionPack,
+		data::map_attribute::{ ExpansionPack, WaterPresence },
 		map_attribute_set_filter::MapAttributeSetFilter,
 		utils::
 		{
@@ -61,6 +61,7 @@ impl Menu
 pub enum Message
 {
 	ToggleState,
+	ChangedMapAttribute,
 }
 
 impl Component for Menu
@@ -100,6 +101,11 @@ impl Component for Menu
 
 				true
 			},
+			Message::ChangedMapAttribute =>
+			{
+				self.settings.send(Request::FilterChanged(self.filter.clone()));
+				false
+			},
 		}
 	}
 
@@ -124,9 +130,10 @@ impl Component for Menu
 						<div>{ ExpansionPack::RiseOfTheRajas }</div>
 						<div>{ ExpansionPack::TheLastKhans }</div>
 					</Accordion>
-					<MapAttributeSetFilter
+					<MapAttributeSetFilter<WaterPresence>
 						title="Víz mennyisége"
-						filter=self.filter.clone() />
+						map_attribute_set=self.filter.borrow().water_presence()
+						changed=self.link.callback(|_| Message::ChangedMapAttribute) />
 				</div>
 			</div>
 		}

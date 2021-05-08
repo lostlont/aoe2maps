@@ -8,40 +8,65 @@ use
 	yew::prelude::*,
 	crate::
 	{
-		agents::filter::Filter,
-		data::map_attribute::{ MapAttribute, WaterPresence },
+		data::
+		{
+			map_attribute::MapAttribute,
+			map_attribute_set::MapAttributeSet,
+		},
 		map_attribute_filter::MapAttributeFilter,
 		utils::accordion::Accordion,
 	},
 };
 
 #[derive(Properties, Clone)]
-pub struct MapAttributeSetFilterProperties
+pub struct MapAttributeSetFilterProperties<TMapAttribute>
+where
+	TMapAttribute: MapAttribute,
 {
 	pub title: String,
-	pub filter: Rc<RefCell<Filter>>,
+	pub map_attribute_set: Rc<RefCell<MapAttributeSet<TMapAttribute>>>,
+	pub changed: Callback<()>,
 }
 
-pub struct MapAttributeSetFilter
+pub struct MapAttributeSetFilter<TMapAttribute>
+where
+	TMapAttribute: MapAttribute,
 {
-	properties: MapAttributeSetFilterProperties,
+	properties: MapAttributeSetFilterProperties<TMapAttribute>,
+	link: ComponentLink<Self>,
 }
 
-impl Component for MapAttributeSetFilter
+pub enum Message<TMapAttribute>
 {
-	type Message = ();
-	type Properties = MapAttributeSetFilterProperties;
+	Toggled(TMapAttribute, bool),
+}
 
-	fn create(properties: Self::Properties, _: ComponentLink<Self>) -> Self
+impl<TMapAttribute> Component for MapAttributeSetFilter<TMapAttribute>
+where
+	TMapAttribute: MapAttribute,
+{
+	type Message = Message<TMapAttribute>;
+	type Properties = MapAttributeSetFilterProperties<TMapAttribute>;
+
+	fn create(properties: Self::Properties, link: ComponentLink<Self>) -> Self
 	{
 		Self
 		{
 			properties,
+			link,
 		}
 	}
 
-	fn update(&mut self, _: Self::Message) -> ShouldRender
+	fn update(&mut self, message: Self::Message) -> ShouldRender
 	{
+		match message
+		{
+			Message::Toggled(map_attribute, is_allowed) =>
+			{
+				self.properties.map_attribute_set.borrow_mut().set(map_attribute, is_allowed);
+				self.properties.changed.emit(());
+			},
+		}
 		false
 	}
 
@@ -56,11 +81,12 @@ impl Component for MapAttributeSetFilter
 		{
 			<Accordion title=&self.properties.title>
 			{
-				for WaterPresence::values().map(|attribute_value| html!
+				for TMapAttribute::values().map(|attribute_value| html!
 					{
 						<MapAttributeFilter
-							filter=self.properties.filter.clone()
-							map_attribute=attribute_value />
+							name=format!("{}", attribute_value)
+							is_allowed=self.properties.map_attribute_set.borrow().contains(&attribute_value)
+							toggled=self.link.callback(move |is_allowed| Message::Toggled(attribute_value.clone(), is_allowed)) />
 					})
 			}
 			</Accordion>

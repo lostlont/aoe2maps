@@ -24,17 +24,15 @@ where
 		self.values.contains(value)
 	}
 
-	pub fn toggle(&mut self, value: T) -> bool
+	pub fn set(&mut self, attribute: T, is_allowed: bool)
 	{
-		if self.values.contains(&value)
+		if is_allowed && !self.values.contains(&attribute)
 		{
-			self.values.remove(&value);
-			false
+			self.values.insert(attribute);
 		}
-		else
+		else if !is_allowed && self.values.contains(&attribute)
 		{
-			self.values.insert(value);
-			true
+			self.values.remove(&attribute);
 		}
 	}
 }

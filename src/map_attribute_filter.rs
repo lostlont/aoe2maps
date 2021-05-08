@@ -1,34 +1,17 @@
-use
-{
-	std::
-	{
-		cell::RefCell,
-		rc::Rc,
-	},
-	yew::
-	{	agent::Dispatcher,
-		prelude::*,
-	},
-	crate::
-	{
-		agents::filter::{ Filter, FilterView },
-		agents::settings::{ Request, Settings },
-		data::map_attribute::WaterPresence,
-	},
-};
+use yew::prelude::*;
 
 #[derive(Properties, Clone)]
 pub struct MapAttributeFilterProperties
 {
-	pub filter: Rc<RefCell<Filter>>,
-	pub map_attribute: WaterPresence,
+	pub name: String,
+	pub is_allowed: bool,
+	pub toggled: Callback<bool>,
 }
 
 pub struct MapAttributeFilter
 {
 	properties: MapAttributeFilterProperties,
 	link: ComponentLink<Self>,
-	settings: Dispatcher<Settings>,
 }
 
 pub enum Message
@@ -47,7 +30,6 @@ impl Component for MapAttributeFilter
 		{
 			properties,
 			link,
-			settings: Settings::dispatcher(),
 		}
 	}
 
@@ -57,8 +39,8 @@ impl Component for MapAttributeFilter
 		{
 			Message::ToggleAllowed =>
 			{
-				self.properties.filter.borrow_mut().toggle(self.properties.map_attribute.clone());
-				self.settings.send(Request::FilterChanged(self.properties.filter.clone()));
+				self.properties.is_allowed = !self.properties.is_allowed;
+				self.properties.toggled.emit(self.properties.is_allowed);
 
 				false
 			},
@@ -77,10 +59,9 @@ impl Component for MapAttributeFilter
 			<label>
 				<input
 					type="checkbox"
-					value=self.properties.map_attribute
-					checked=self.properties.filter.borrow().allowed_water_presence().contains(&self.properties.map_attribute)
+					checked=self.properties.is_allowed
 					onclick=self.link.callback(|_| Message::ToggleAllowed) />
-				{ &self.properties.map_attribute }
+				{ &self.properties.name }
 			</label>
 		}
 	}

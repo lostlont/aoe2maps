@@ -1,6 +1,7 @@
 use std::
 {
 	cmp::Eq,
+	fmt::Display,
 	hash::Hash,
 	slice::Iter,
 };
@@ -13,7 +14,7 @@ pub use
 	water_presence::WaterPresence,
 };
 
-pub trait MapAttribute : Clone + Eq + Hash + 'static
+pub trait MapAttribute : Clone + Display + Eq + Hash + 'static
 where
 	Self: Sized,
 {

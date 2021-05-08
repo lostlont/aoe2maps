@@ -1,7 +1,12 @@
 // TODO Move to data?
 use
 {
-	std::iter::FromIterator,
+	std::
+	{
+		cell::RefCell,
+		iter::FromIterator,
+		rc::Rc,
+	},
 	crate::
 	{
 		data::
@@ -15,7 +20,7 @@ use
 
 pub struct Filter
 {
-	allowed_water_presence: MapAttributeSet<WaterPresence>,
+	allowed_water_presence: Rc<RefCell<MapAttributeSet<WaterPresence>>>,
 }
 
 impl Filter
@@ -24,35 +29,29 @@ impl Filter
 	{
 		Self
 		{
-			allowed_water_presence: MapAttributeSet::from_iter(vec![
+			allowed_water_presence: Rc::new(RefCell::new(MapAttributeSet::from_iter(vec![
 				WaterPresence::None,
 				WaterPresence::Some,
 				WaterPresence::Islands,
-			]),
+			]))),
 		}
 	}
 
-	pub fn toggle(&mut self, water_presence: WaterPresence) -> bool
+	pub fn water_presence(&self) -> Rc<RefCell<MapAttributeSet<WaterPresence>>>
 	{
-		self.allowed_water_presence.toggle(water_presence)
+		self.allowed_water_presence.clone()
 	}
 }
 
 pub trait FilterView
 {
-	fn allowed_water_presence(&self) -> &MapAttributeSet<WaterPresence>;
 	fn is_allowed(&self, map_data: &MapData) -> bool;
 }
 
 impl FilterView for Filter
 {
-	fn allowed_water_presence(&self) -> &MapAttributeSet<WaterPresence>
-	{
-		&self.allowed_water_presence
-	}
-
 	fn is_allowed(&self, map_data: &MapData) -> bool
 	{
-		self.allowed_water_presence.contains(&map_data.water_presence)
+		self.allowed_water_presence.borrow().contains(&map_data.water_presence)
 	}
 }
