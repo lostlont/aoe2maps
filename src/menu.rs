@@ -116,16 +116,20 @@ impl Component for Menu
 		{
 			<div class=self.class()>
 				<Hamburger
-					clicked=self.link.callback(|_| Message::ToggleState) />
+					clicked=self.link.callback(|_| Message::ToggleState)
+				/>
 				<div class="content">
 					<MapAttributeSetFilter<ExpansionPack>
 						title="Kiegészítő"
 						map_attribute_set=self.filter.borrow().expansion_pack()
-						changed=self.link.callback(|_| Message::ChangedMapAttribute) />
+						is_incremental=true
+						changed=self.link.callback(|_| Message::ChangedMapAttribute)
+					/>
 					<MapAttributeSetFilter<WaterPresence>
 						title="Víz mennyisége"
 						map_attribute_set=self.filter.borrow().water_presence()
-						changed=self.link.callback(|_| Message::ChangedMapAttribute) />
+						changed=self.link.callback(|_| Message::ChangedMapAttribute)
+					/>
 				</div>
 			</div>
 		}

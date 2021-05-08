@@ -24,7 +24,12 @@ where
 	TMapAttribute: MapAttribute,
 {
 	pub title: String,
+
 	pub map_attribute_set: Rc<RefCell<MapAttributeSet<TMapAttribute>>>,
+
+	#[prop_or(false)]
+	pub is_incremental: bool,
+
 	pub changed: Callback<()>,
 }
 
@@ -63,11 +68,38 @@ where
 		{
 			Message::Toggled(map_attribute, is_allowed) =>
 			{
-				self.properties.map_attribute_set.borrow_mut().set(map_attribute, is_allowed);
+				let mut setter = self.properties.map_attribute_set.borrow_mut();
+
+				if self.properties.is_incremental
+				{
+					let mut is_in_sequence = true;
+					for attribute in TMapAttribute::values()
+					{
+						if is_in_sequence && *attribute != map_attribute
+						{
+							setter.set(attribute.clone(), true);
+						}
+						else if is_in_sequence
+						{
+							setter.set(attribute.clone(), is_allowed);
+
+							is_in_sequence = false;
+						}
+						else
+						{
+							setter.set(attribute.clone(), false);
+						}
+					}
+				}
+				else
+				{
+					setter.set(map_attribute, is_allowed);
+				}
+
 				self.properties.changed.emit(());
+				true
 			},
 		}
-		false
 	}
 
 	fn change(&mut self, _: Self::Properties) -> ShouldRender

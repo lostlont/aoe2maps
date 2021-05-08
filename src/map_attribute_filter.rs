@@ -1,6 +1,6 @@
 use yew::prelude::*;
 
-#[derive(Properties, Clone)]
+#[derive(Properties, Clone, PartialEq)]
 pub struct MapAttributeFilterProperties
 {
 	pub name: String,
@@ -47,9 +47,15 @@ impl Component for MapAttributeFilter
 		}
 	}
 
-	fn change(&mut self, _: Self::Properties) -> ShouldRender
+	fn change(&mut self, properties: Self::Properties) -> ShouldRender
 	{
-		false
+		let is_changed = properties != self.properties;
+		if is_changed
+		{
+			self.properties = properties;
+		}
+
+		is_changed
 	}
 
 	fn view(&self) -> Html

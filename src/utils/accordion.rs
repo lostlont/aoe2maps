@@ -4,7 +4,7 @@ use
 	web_sys::HtmlElement,
 };
 
-#[derive(Properties, Clone)]
+#[derive(Properties, Clone, PartialEq)]
 pub struct AccordionProperties
 {
 	pub children: Children,
@@ -97,9 +97,15 @@ impl Component for Accordion
 		true
 	}
 
-	fn change(&mut self, _: Self::Properties) -> bool
+	fn change(&mut self, properties: Self::Properties) -> bool
 	{
-		false
+		let is_changed = properties != self.properties;
+		if is_changed
+		{
+			self.properties = properties;
+		}
+
+		is_changed
 	}
 
 	fn view(&self) -> Html
