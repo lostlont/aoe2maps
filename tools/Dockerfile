@@ -4,7 +4,7 @@ arg user
 arg group
 
 # create user
-run groupadd -g $group docker-build
+run groupadd -fg $group docker-build
 run useradd -ms /bin/bash -u $user -g $group docker-build
 user $user:$group
 workdir /home/docker-build
