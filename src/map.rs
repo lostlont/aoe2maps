@@ -64,7 +64,11 @@ impl Map
 		html!
 		{
 			<ul>
-				<li>{ &self.properties.map_data.water_presence }</li>
+				<li>{ self.properties.map_data.water_presence() }</li>
+				<li>{ "Fa: " }{ self.properties.map_data.wood_amount() }</li>
+				<li>{ "Táplálék: " }{ self.properties.map_data.food_amount() }</li>
+				<li>{ "Arany: " }{ self.properties.map_data.gold_amount() }</li>
+				<li>{ "Kő: " }{ self.properties.map_data.stone_amount() }</li>
 			</ul>
 		}
 	}
@@ -128,9 +132,9 @@ impl Component for Map
 		html!
 		{
 			<div class=self.row_class()>
-				<div><h3>{ &self.properties.map_data.name }</h3></div>
-				<div><img src=&self.properties.map_data.image /></div>
-				<div>{ &self.properties.map_data.expansion_pack }</div>
+				<div><h3>{ self.properties.map_data.name() }</h3></div>
+				<div><img src=self.properties.map_data.image() /></div>
+				<div>{ self.properties.map_data.expansion_pack() }</div>
 				<div>{ self.render_features() }</div>
 			</div>
 		}

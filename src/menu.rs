@@ -17,7 +17,7 @@ use
 			filter::Filter,
 			settings::{ MenuState, Request, Settings },
 		},
-		data::map_attribute::{ ExpansionPack, WaterPresence },
+		data::map_attribute::{ ExpansionPack, ResourceAmount, WaterPresence },
 		map_attribute_set_filter::MapAttributeSetFilter,
 		utils::hamburger::Hamburger,
 	},
@@ -137,6 +137,26 @@ impl Component for Menu
 					<MapAttributeSetFilter<WaterPresence>
 						title="Víz mennyisége"
 						map_attribute_set=self.filter.borrow().water_presence()
+						changed=self.link.callback(|_| Message::ChangedMapAttribute)
+					/>
+					<MapAttributeSetFilter<ResourceAmount>
+						title="Fa mennyisége"
+						map_attribute_set=self.filter.borrow().wood_amount()
+						changed=self.link.callback(|_| Message::ChangedMapAttribute)
+					/>
+					<MapAttributeSetFilter<ResourceAmount>
+						title="Táplálék mennyisége"
+						map_attribute_set=self.filter.borrow().food_amount()
+						changed=self.link.callback(|_| Message::ChangedMapAttribute)
+					/>
+					<MapAttributeSetFilter<ResourceAmount>
+						title="Arany mennyisége"
+						map_attribute_set=self.filter.borrow().gold_amount()
+						changed=self.link.callback(|_| Message::ChangedMapAttribute)
+					/>
+					<MapAttributeSetFilter<ResourceAmount>
+						title="Kő mennyisége"
+						map_attribute_set=self.filter.borrow().stone_amount()
 						changed=self.link.callback(|_| Message::ChangedMapAttribute)
 					/>
 				</div>
