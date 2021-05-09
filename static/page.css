@@ -85,12 +85,13 @@ body
 	box-shadow: 0px 0px 6px var(--shadow-color);
 	position: fixed;
 	height: 100%;
-	overflow: hidden;
+	max-height: 100%;
+	overflow-y: auto;
 	right: 0;
 	top: 0;
-	transition-delay: var(--animation-duration), 0s, 0s;
+	transition-delay: var(--animation-duration), var(--animation-duration), 0s, 0s;
 	transition-duration: var(--animation-duration);
-	transition-property: height, width, right;
+	transition-property: height, max-height, right, width;
 	transition-timing-function: ease-in-out;
 	width: 240px;
 }
@@ -195,7 +196,7 @@ h3
 	.menu
 	{
 		right: 0;
-		transition-delay: 0s, var(--animation-duration), var(--animation-duration);
+		transition-delay: 0s, 0s, var(--animation-duration), var(--animation-duration);
 		width: 100%;
 	}
 
@@ -207,11 +208,13 @@ h3
 	.menu.open
 	{
 		height: 50%;
+		max-height: 50%;
 	}
 
 	.menu.collapsed
 	{
 		height: 40px;
+		overflow-y: hidden;
 		right: 0;
 	}
 
