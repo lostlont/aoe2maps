@@ -67,11 +67,22 @@ impl Component for Menu
 
 	fn create(_: Self::Properties, link: ComponentLink<Self>) -> Self
 	{
+		let is_mobile = web_sys::window()
+			.and_then(|w| w.document())
+			.and_then(|d| d.document_element())
+			.map_or(false, |de| de.client_width() <= 992);
+
+		let state = match is_mobile
+		{
+			true => State::Collapsed,
+			false => State::Open,
+		};
+
 		Self
 		{
 			link,
 			settings: Settings::dispatcher(),
-			state: State::Open,
+			state,
 			filter: Rc::new(RefCell::new(Filter::new())),
 		}
 	}
