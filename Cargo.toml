@@ -11,3 +11,6 @@ crate-type = ["cdylib"]
 yew = "0.17.3"
 wasm-bindgen = "0.2.73"
 web-sys = {	version = "0.3.50", features = ["CssStyleDeclaration", "HtmlElement"] }
+
+[profile.release]
+codegen-units=1
