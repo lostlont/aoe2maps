@@ -17,9 +17,9 @@ run mkdir aoe2maps
 workdir aoe2maps
 copy --chown=$user:$group Cargo.* ./
 run mkdir -p src && touch src/lib.rs
-run wasm-pack build --release --target web --out-name aoe2maps --out-dir build
-run rm build/*
+run wasm-pack build --release --target web --no-typescript --out-name aoe2maps --out-dir build
 
 # build project
 copy --chown=$user:$group . .
-cmd wasm-pack build --release --target web --out-name aoe2maps --out-dir build
+run touch src/lib.rs
+cmd wasm-pack build --release --target web --no-typescript --out-name aoe2maps --out-dir build
