@@ -1,4 +1,4 @@
-from rust:1.50
+from rust:1.52
 
 arg user
 arg group
