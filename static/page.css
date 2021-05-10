@@ -50,9 +50,9 @@ body
 	opacity: 100%;
 	overflow: hidden;
 	scale: 1.0 1.0;
-	transition-delay: 0s, 0s, var(--short-animation-delay), var(--short-animation-delay);
+	transition-delay: 0s, 0s, var(--short-animation-delay), var(--short-animation-delay), 0s;
 	transition-duration: var(--animation-duration);
-	transition-property: margin-top, max-height, opacity, scale;
+	transition-property: margin-top, max-height, opacity, scale, filter;
 	transition-timing-function: ease-in-out;
 }
 
@@ -242,12 +242,17 @@ h3
 	max-height: 0px;
 	opacity: 0%;
 	scale: 0.9 0.9;
-	transition-delay: var(--short-animation-delay), var(--short-animation-delay), 0s, 0s;
+	transition-delay: var(--short-animation-delay), var(--short-animation-delay), 0s, 0s, 0s;
 }
 
 .table > .row.hidden:not(:first-child)
 {
 	margin-top: 0px;
+}
+
+.table > .row.disabled
+{
+	filter: grayscale(100%) brightness(0.8);
 }
 
 .menu label

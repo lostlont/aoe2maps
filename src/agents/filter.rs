@@ -11,6 +11,7 @@ use
 	{
 		data::
 		{
+			filter_method::FilterMethod,
 			map_attribute::{ ExpansionPack, MapAttribute, ResourceAmount, WaterPresence },
 			map_attribute_set::MapAttributeSet,
 			map_data::MapData,
@@ -22,6 +23,7 @@ type SharedSet<T> = Rc<RefCell<MapAttributeSet<T>>>;
 
 pub struct Filter
 {
+	filter_method: FilterMethod,
 	allowed_expansion_packs: SharedSet<ExpansionPack>,
 	allowed_water_presence: SharedSet<WaterPresence>,
 	allowed_wood_amount: SharedSet<ResourceAmount>,
@@ -43,6 +45,7 @@ impl Filter
 
 		Self
 		{
+			filter_method: FilterMethod::Hide,
 			allowed_expansion_packs: from::<ExpansionPack>(),
 			allowed_water_presence: from::<WaterPresence>(),
 			allowed_wood_amount: from::<ResourceAmount>(),
@@ -50,6 +53,11 @@ impl Filter
 			allowed_gold_amount: from::<ResourceAmount>(),
 			allowed_stone_amount: from::<ResourceAmount>(),
 		}
+	}
+
+	pub fn set_filter_method(&mut self, filter_method: FilterMethod)
+	{
+		self.filter_method = filter_method;
 	}
 
 	pub fn expansion_pack(&self) -> SharedSet<ExpansionPack>
@@ -85,14 +93,32 @@ impl Filter
 
 pub trait FilterView
 {
+	fn filter_method(&self) -> FilterMethod;
 	fn is_allowed(&self, map_data: &MapData) -> bool;
+	fn is_allowed_by_expansion_pack(&self, map_data: &MapData) -> bool;
+	fn is_allowed_by_others(&self, map_data: &MapData) -> bool;
 }
 
 impl FilterView for Filter
 {
+	fn filter_method(&self) -> FilterMethod
+	{
+		self.filter_method
+	}
+
 	fn is_allowed(&self, map_data: &MapData) -> bool
 	{
-		self.allowed_expansion_packs.borrow().contains(map_data.expansion_pack()) &&
+		self.is_allowed_by_expansion_pack(map_data) &&
+		self.is_allowed_by_others(map_data)
+	}
+
+	fn is_allowed_by_expansion_pack(&self, map_data: &MapData) -> bool
+	{
+		self.allowed_expansion_packs.borrow().contains(map_data.expansion_pack())
+	}
+
+	fn is_allowed_by_others(&self, map_data: &MapData) -> bool
+	{
 		self.allowed_water_presence.borrow().contains(map_data.water_presence()) &&
 		self.allowed_wood_amount.borrow().contains(map_data.wood_amount()) &&
 		self.allowed_food_amount.borrow().contains(map_data.food_amount()) &&

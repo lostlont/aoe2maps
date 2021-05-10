@@ -17,7 +17,11 @@ use
 			filter::Filter,
 			settings::{ MenuState, Request, Settings },
 		},
-		data::map_attribute::{ ExpansionPack, ResourceAmount, WaterPresence },
+		data::
+		{
+			filter_method::FilterMethod,
+			map_attribute::{ ExpansionPack, ResourceAmount, WaterPresence },
+		},
 		map_attribute_set_filter::MapAttributeSetFilter,
 		utils::hamburger::Hamburger,
 	},
@@ -58,6 +62,7 @@ pub enum Message
 {
 	ToggleState,
 	ChangedMapAttribute,
+	SetFilterMethod(FilterMethod),
 }
 
 impl Component for Menu
@@ -113,6 +118,13 @@ impl Component for Menu
 				self.settings.send(Request::FilterChanged(self.filter.clone()));
 				false
 			},
+			Message::SetFilterMethod(filter_method) =>
+			{
+				self.filter.borrow_mut().set_filter_method(filter_method);
+
+				self.settings.send(Request::FilterChanged(self.filter.clone()));
+				false
+			},
 		}
 	}
 
@@ -128,6 +140,29 @@ impl Component for Menu
 			<div class=self.class()>
 				<Hamburger clicked=self.link.callback(|_| Message::ToggleState) />
 				<div class="content">
+					<div>
+						{ "Szűrés módja " }
+						<div>
+							<button
+								type="button"
+								onclick=self.link.callback(|_| Message::SetFilterMethod(FilterMethod::Hide))
+							>
+								{ FilterMethod::Hide }
+							</button>
+							<button
+								type="button"
+								onclick=self.link.callback(|_| Message::SetFilterMethod(FilterMethod::Disable))
+							>
+								{ FilterMethod::Disable }
+							</button>
+							<button
+								type="button"
+								onclick=self.link.callback(|_| Message::SetFilterMethod(FilterMethod::Mixed))
+							>
+								{ FilterMethod::Mixed }
+							</button>
+						</div>
+					</div>
 					<MapAttributeSetFilter<ExpansionPack>
 						title="Kiegészítő"
 						map_attribute_set=self.filter.borrow().expansion_pack()

@@ -17,7 +17,11 @@ use
 			filter::FilterView,
 			settings::{ Response, Settings },
 		},
-		data::map_data::MapData,
+		data::
+		{
+			filter_method::FilterMethod,
+			map_data::MapData,
+		},
 	},
 };
 
@@ -27,6 +31,7 @@ pub enum State
 	Default,
 	Visible,
 	Hidden,
+	Disabled,
 }
 
 #[derive(Properties, Clone)]
@@ -53,6 +58,7 @@ impl Map
 		match self.properties.state
 		{
 			State::Hidden => classes.push("hidden"),
+			State::Disabled => classes.push("disabled"),
 			_ => {},
 		};
 
@@ -70,6 +76,32 @@ impl Map
 				<li>{ "Arany: " }{ self.properties.map_data.gold_amount() }</li>
 				<li>{ "Kő: " }{ self.properties.map_data.stone_amount() }</li>
 			</ul>
+		}
+	}
+
+	fn update(&mut self, filter: Rc<RefCell<dyn FilterView>>)
+	{
+		let filter = filter.borrow();
+		let is_allowed = filter.is_allowed(&self.properties.map_data);
+		if is_allowed && (self.properties.state != State::Default)
+		{
+			self.properties.state = State::Visible;
+		}
+		else if !is_allowed
+		{
+			self.properties.state = match filter.filter_method()
+			{
+				FilterMethod::Hide => State::Hidden,
+				FilterMethod::Disable => State::Disabled,
+				FilterMethod::Mixed => if filter.is_allowed_by_others(&self.properties.map_data)
+				{
+					State::Disabled
+				}
+				else
+				{
+					State::Hidden
+				},
+			};
 		}
 	}
 }
@@ -105,18 +137,7 @@ impl Component for Map
 		match message
 		{
 			Message::None => {},
-			Message::FilterChanged(filter) =>
-			{
-				let visible = filter.borrow().is_allowed(&self.properties.map_data);
-				if visible && (self.properties.state != State::Default)
-				{
-					self.properties.state = State::Visible;
-				}
-				else if !visible
-				{
-					self.properties.state = State::Hidden;
-				}
-			},
+			Message::FilterChanged(filter) => self.update(filter),
 		}
 
 		true
