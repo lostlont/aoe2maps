@@ -14,7 +14,7 @@ use
 	{
 		agents::
 		{
-			filter::Filter,
+			filter::{ Filter, FilterView },
 			settings::{ MenuState, Request, Settings },
 		},
 		data::
@@ -23,7 +23,11 @@ use
 			map_attribute::{ ExpansionPack, ResourceAmount, WaterPresence },
 		},
 		map_attribute_set_filter::MapAttributeSetFilter,
-		utils::hamburger::Hamburger,
+		utils::
+		{
+			accordion::Accordion,
+			hamburger::Hamburger,
+		},
 	},
 };
 
@@ -123,7 +127,7 @@ impl Component for Menu
 				self.filter.borrow_mut().set_filter_method(filter_method);
 
 				self.settings.send(Request::FilterChanged(self.filter.clone()));
-				false
+				true
 			},
 		}
 	}
@@ -140,29 +144,32 @@ impl Component for Menu
 			<div class=self.class()>
 				<Hamburger clicked=self.link.callback(|_| Message::ToggleState) />
 				<div class="content">
-					<div>
-						{ "Szűrés módja " }
-						<div>
-							<button
-								type="button"
+					<Accordion title="Szűrés módja">
+						<label>
+							<input
+								type="radio"
+								checked=self.filter.borrow().filter_method() == FilterMethod::Hide
 								onclick=self.link.callback(|_| Message::SetFilterMethod(FilterMethod::Hide))
-							>
-								{ FilterMethod::Hide }
-							</button>
-							<button
-								type="button"
+							/>
+							{ FilterMethod::Hide }
+						</label>
+						<label>
+							<input
+								type="radio"
+								checked=self.filter.borrow().filter_method() == FilterMethod::Disable
 								onclick=self.link.callback(|_| Message::SetFilterMethod(FilterMethod::Disable))
-							>
-								{ FilterMethod::Disable }
-							</button>
-							<button
-								type="button"
+							/>
+							{ FilterMethod::Disable }
+						</label>
+						<label>
+							<input
+								type="radio"
+								checked=self.filter.borrow().filter_method() == FilterMethod::Mixed
 								onclick=self.link.callback(|_| Message::SetFilterMethod(FilterMethod::Mixed))
-							>
-								{ FilterMethod::Mixed }
-							</button>
-						</div>
-					</div>
+							/>
+							{ FilterMethod::Mixed }
+						</label>
+					</Accordion>
 					<MapAttributeSetFilter<ExpansionPack>
 						title="Kiegészítő"
 						map_attribute_set=self.filter.borrow().expansion_pack()

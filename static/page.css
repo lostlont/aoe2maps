@@ -252,7 +252,7 @@ h3
 
 .table > .row.disabled
 {
-	filter: grayscale(100%) brightness(0.8);
+	filter: grayscale(90%) brightness(85%);
 }
 
 .menu label

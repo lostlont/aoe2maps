@@ -1,6 +1,6 @@
 use std::fmt::{ Error, Formatter, Display };
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, PartialEq)]
 pub enum FilterMethod
 {
 	Hide,

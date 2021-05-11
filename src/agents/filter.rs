@@ -45,7 +45,7 @@ impl Filter
 
 		Self
 		{
-			filter_method: FilterMethod::Hide,
+			filter_method: FilterMethod::Mixed,
 			allowed_expansion_packs: from::<ExpansionPack>(),
 			allowed_water_presence: from::<WaterPresence>(),
 			allowed_wood_amount: from::<ResourceAmount>(),
