@@ -17,18 +17,18 @@ use
 			filter::{ Filter, FilterView },
 			settings::{ MenuState, Request, Settings },
 		},
+		components::utils::
+		{
+			accordion::Accordion,
+			hamburger::Hamburger,
+		},
 		data::
 		{
 			filter_method::FilterMethod,
 			map_attribute::{ ExpansionPack, ResourceAmount, WaterPresence },
 		},
-		map_attribute_set_filter::MapAttributeSetFilter,
-		utils::
-		{
-			accordion::Accordion,
-			hamburger::Hamburger,
-		},
 	},
+	super::map_attribute_set_filter::MapAttributeSetFilter,
 };
 
 #[derive(PartialEq)]

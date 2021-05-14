@@ -1,12 +1,12 @@
 use
 {
 	yew::prelude::*,
-	crate::data::map_data::MapData,
-	super::
+	crate::
 	{
-		table::Table,
-		menu::Menu,
+		components::menu::Menu,
+		data::map_data::MapData,
 	},
+	super::table::Table,
 };
 
 #[derive(Properties, Clone)]

@@ -4,23 +4,13 @@ use
 {
 	wasm_bindgen::prelude::*,
 	yew::prelude::*,
+	components::page::{ Page, PageProperties },
 	data::create_maps,
-	page::
-	{
-		Page,
-		PageProperties,
-	},
 };
 
 mod agents;
+mod components;
 mod data;
-mod map;
-mod map_attribute_filter;
-mod map_attribute_set_filter;
-mod menu;
-mod page;
-mod table;
-mod utils;
 
 #[wasm_bindgen(start)]
 pub fn run_app()

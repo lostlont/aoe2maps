@@ -8,14 +8,14 @@ use
 	yew::prelude::*,
 	crate::
 	{
+		components::utils::accordion::Accordion,
 		data::
 		{
 			map_attribute::MapAttribute,
 			map_attribute_set::MapAttributeSet,
 		},
-		map_attribute_filter::MapAttributeFilter,
-		utils::accordion::Accordion,
 	},
+	super::map_attribute_filter::MapAttributeFilter,
 };
 
 #[derive(Properties, Clone)]
