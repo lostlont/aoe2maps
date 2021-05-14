@@ -1,7 +1,7 @@
 use yew::prelude::*;
 
 #[derive(Clone, Copy, PartialEq)]
-pub enum Mode
+pub enum FilterEntryType
 {
 	CheckBox,
 	RadioButton,
@@ -12,8 +12,8 @@ pub struct Properties
 {
 	pub name: String,
 
-	#[prop_or(Mode::CheckBox)]
-	pub mode: Mode,
+	#[prop_or(FilterEntryType::CheckBox)]
+	pub entry_type: FilterEntryType,
 
 	pub is_selected: bool,
 
@@ -28,9 +28,9 @@ pub struct FilterEntry
 
 impl FilterEntry
 {
-	fn mode(&self) -> &str
+	fn entry_type(&self) -> &str
 	{
-		if self.properties.mode == Mode::CheckBox
+		if self.properties.entry_type == FilterEntryType::CheckBox
 		{
 			"checkbox"
 		}
@@ -91,7 +91,7 @@ impl Component for FilterEntry
 		{
 			<label>
 				<input
-					type=self.mode()
+					type=self.entry_type()
 					checked=self.properties.is_selected
 					onclick=self.link.callback(|_| Message::ToggleSelected)
 				/>

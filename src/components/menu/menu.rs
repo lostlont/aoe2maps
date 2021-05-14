@@ -14,19 +14,15 @@ use
 	{
 		agents::
 		{
-			filter::{ Filter, FilterView },
+			filter::Filter,
 			settings::{ MenuState, Request, Settings },
 		},
-		components::utils::
+		components::
 		{
-			accordion::Accordion,
-			hamburger::Hamburger,
+			menu::filter_method_selector::FilterMethodSelector,
+			utils::hamburger::Hamburger,
 		},
-		data::
-		{
-			filter_method::FilterMethod,
-			map_attribute::{ ExpansionPack, ResourceAmount, WaterPresence },
-		},
+		data::map_attribute::{ ExpansionPack, ResourceAmount, WaterPresence },
 	},
 	super::map_attribute_set_filter::MapAttributeSetFilter,
 };
@@ -66,7 +62,6 @@ pub enum Message
 {
 	ToggleState,
 	ChangedMapAttribute,
-	SetFilterMethod(FilterMethod),
 }
 
 impl Component for Menu
@@ -122,13 +117,6 @@ impl Component for Menu
 				self.settings.send(Request::FilterChanged(self.filter.clone()));
 				false
 			},
-			Message::SetFilterMethod(filter_method) =>
-			{
-				self.filter.borrow_mut().set_filter_method(filter_method);
-
-				self.settings.send(Request::FilterChanged(self.filter.clone()));
-				true
-			},
 		}
 	}
 
@@ -144,32 +132,9 @@ impl Component for Menu
 			<div class=self.class()>
 				<Hamburger clicked=self.link.callback(|_| Message::ToggleState) />
 				<div class="content">
-					<Accordion title="Szűrés módja">
-						<label>
-							<input
-								type="radio"
-								checked=self.filter.borrow().filter_method() == FilterMethod::Hide
-								onclick=self.link.callback(|_| Message::SetFilterMethod(FilterMethod::Hide))
-							/>
-							{ FilterMethod::Hide }
-						</label>
-						<label>
-							<input
-								type="radio"
-								checked=self.filter.borrow().filter_method() == FilterMethod::Disable
-								onclick=self.link.callback(|_| Message::SetFilterMethod(FilterMethod::Disable))
-							/>
-							{ FilterMethod::Disable }
-						</label>
-						<label>
-							<input
-								type="radio"
-								checked=self.filter.borrow().filter_method() == FilterMethod::Mixed
-								onclick=self.link.callback(|_| Message::SetFilterMethod(FilterMethod::Mixed))
-							/>
-							{ FilterMethod::Mixed }
-						</label>
-					</Accordion>
+					<FilterMethodSelector
+						filter=self.filter.clone()
+					/>
 					<MapAttributeSetFilter<ExpansionPack>
 						title="Kiegészítő"
 						map_attribute_set=self.filter.borrow().expansion_pack()

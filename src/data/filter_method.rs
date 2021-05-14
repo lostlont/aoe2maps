@@ -10,7 +10,7 @@ pub enum FilterMethod
 
 impl FilterMethod
 {
-	pub fn name(&self) -> &str
+	fn name(&self) -> &str
 	{
 		match self
 		{
