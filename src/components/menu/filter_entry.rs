@@ -1,28 +1,55 @@
 use yew::prelude::*;
 
+#[derive(Clone, Copy, PartialEq)]
+pub enum Mode
+{
+	CheckBox,
+	RadioButton,
+}
+
 #[derive(Properties, Clone, PartialEq)]
-pub struct MapAttributeFilterProperties
+pub struct Properties
 {
 	pub name: String,
-	pub is_allowed: bool,
+
+	#[prop_or(Mode::CheckBox)]
+	pub mode: Mode,
+
+	pub is_selected: bool,
+
 	pub toggled: Callback<bool>,
 }
 
-pub struct MapAttributeFilter
+pub struct FilterEntry
 {
-	properties: MapAttributeFilterProperties,
+	properties: Properties,
 	link: ComponentLink<Self>,
+}
+
+impl FilterEntry
+{
+	fn mode(&self) -> &str
+	{
+		if self.properties.mode == Mode::CheckBox
+		{
+			"checkbox"
+		}
+		else
+		{
+			"radio"
+		}
+	}
 }
 
 pub enum Message
 {
-	ToggleAllowed,
+	ToggleSelected,
 }
 
-impl Component for MapAttributeFilter
+impl Component for FilterEntry
 {
 	type Message = Message;
-	type Properties = MapAttributeFilterProperties;
+	type Properties = Properties;
 
 	fn create(properties: Self::Properties, link: ComponentLink<Self>) -> Self
 	{
@@ -37,10 +64,10 @@ impl Component for MapAttributeFilter
 	{
 		match message
 		{
-			Message::ToggleAllowed =>
+			Message::ToggleSelected =>
 			{
-				self.properties.is_allowed = !self.properties.is_allowed;
-				self.properties.toggled.emit(self.properties.is_allowed);
+				self.properties.is_selected = !self.properties.is_selected;
+				self.properties.toggled.emit(self.properties.is_selected);
 
 				false
 			},
@@ -64,9 +91,9 @@ impl Component for MapAttributeFilter
 		{
 			<label>
 				<input
-					type="checkbox"
-					checked=self.properties.is_allowed
-					onclick=self.link.callback(|_| Message::ToggleAllowed)
+					type=self.mode()
+					checked=self.properties.is_selected
+					onclick=self.link.callback(|_| Message::ToggleSelected)
 				/>
 				{ &self.properties.name }
 			</label>

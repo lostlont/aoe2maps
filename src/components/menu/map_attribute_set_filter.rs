@@ -15,7 +15,7 @@ use
 			map_attribute_set::MapAttributeSet,
 		},
 	},
-	super::map_attribute_filter::MapAttributeFilter,
+	super::filter_entry::FilterEntry,
 };
 
 #[derive(Properties, Clone)]
@@ -115,9 +115,9 @@ where
 			{
 				for TMapAttribute::values().map(|attribute_value| html!
 					{
-						<MapAttributeFilter
+						<FilterEntry
 							name=format!("{}", attribute_value)
-							is_allowed=self.properties.map_attribute_set.borrow().contains(&attribute_value)
+							is_selected=self.properties.map_attribute_set.borrow().contains(&attribute_value)
 							toggled=self.link.callback(move |is_allowed| Message::Toggled(attribute_value.clone(), is_allowed))
 						/>
 					})
