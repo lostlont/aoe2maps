@@ -1,9 +1,12 @@
-use std::
+use
 {
-	cmp::Eq,
-	fmt::Display,
-	hash::Hash,
-	slice::Iter,
+	std::
+	{
+		cmp::Eq,
+		fmt::Display,
+		hash::Hash,
+	},
+	super::enum_values::EnumValues,
 };
 
 mod expansion_pack;
@@ -16,9 +19,8 @@ pub use
 	water_presence::WaterPresence,
 };
 
-pub trait MapAttribute : Clone + Display + Eq + Hash + 'static
+pub trait MapAttribute : Clone + Display + EnumValues + Eq + Hash + 'static
 where
 	Self: Sized,
 {
-	fn values() -> Iter<'static, Self>;
 }

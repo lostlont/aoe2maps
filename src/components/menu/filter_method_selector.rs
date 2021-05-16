@@ -17,12 +17,13 @@ use
 			filter::{ Filter, FilterView },
 			settings::{ Request, Settings },
 		},
-		components::
+		components::utils::accordion::Accordion,
+		data::
 		{
-			menu::filter_entry::{ FilterEntry, FilterEntryType },
-			utils::accordion::Accordion,
+			enum_values::EnumValues,
+			filter_method::FilterMethod,
 		},
-		data::filter_method::FilterMethod,
+		views::filter_radio_button::FilterRadioButton,
 	},
 };
 
@@ -35,29 +36,22 @@ pub struct Properties
 pub struct FilterMethodSelector
 {
 	properties: Properties,
-	link: ComponentLink<Self>,
 	settings: Dispatcher<Settings>,
-}
-
-impl FilterMethodSelector
-{
-	fn render_entry(&self, filter_method: FilterMethod) -> Html
-	{
-		html!
-		{
-			<FilterEntry
-				name=format!("{}", filter_method)
-				entry_type=FilterEntryType::RadioButton
-				is_selected=self.properties.filter.borrow().filter_method() == filter_method
-				toggled=self.link.callback(move |_| Message::Selected(filter_method))
-			/>
-		}
-	}
+	buttons: Vec<(FilterMethod, FilterRadioButton)>,
 }
 
 pub enum Message
 {
 	Selected(FilterMethod),
+}
+
+impl FilterMethodSelector
+{
+	fn register_button(value: FilterMethod, link: &ComponentLink<Self>) -> FilterRadioButton
+	{
+		let name = format!("{}", value);
+		FilterRadioButton::new(&name, link.callback(move |_| Message::Selected(value)))
+	}
 }
 
 impl Component for FilterMethodSelector
@@ -67,11 +61,20 @@ impl Component for FilterMethodSelector
 
 	fn create(properties: Self::Properties, link: ComponentLink<Self>) -> Self
 	{
+		let buttons = FilterMethod
+			::values()
+			.map(|fm| Self::register_button(*fm, &link));
+		let buttons = FilterMethod
+			::values()
+			.copied()
+			.zip(buttons)
+			.collect();
+
 		Self
 		{
 			properties,
-			link,
 			settings: Settings::dispatcher(),
+			buttons,
 		}
 	}
 
@@ -95,12 +98,14 @@ impl Component for FilterMethodSelector
 
 	fn view(&self) -> Html
 	{
+		let is_checked = |filter_method: FilterMethod| self.properties.filter.borrow().get_filter_method() == filter_method;
+
 		html!
 		{
 			<Accordion title="Szűrés módja">
-			{ self.render_entry(FilterMethod::Hide) }
-			{ self.render_entry(FilterMethod::Disable) }
-			{ self.render_entry(FilterMethod::Mixed) }
+			{
+				for self.buttons.iter().map(|(fm, rb)| rb.render(is_checked(*fm)))
+			}
 			</Accordion>
 		}
 	}

@@ -19,10 +19,18 @@ use
 		},
 		components::
 		{
-			menu::filter_method_selector::FilterMethodSelector,
+			menu::
+			{
+				enum_filter::EnumFilter,
+				filter_method_selector::FilterMethodSelector,
+			},
 			utils::hamburger::Hamburger,
 		},
-		data::map_attribute::{ ExpansionPack, ResourceAmount, WaterPresence },
+		data::
+		{
+			enum_values::EnumValues,
+			map_attribute::{ ExpansionPack, ResourceAmount, WaterPresence },
+		},
 	},
 	super::map_attribute_set_filter::MapAttributeSetFilter,
 };
@@ -61,6 +69,7 @@ impl Menu
 pub enum Message
 {
 	ToggleState,
+	ChangedExpansionPack(ExpansionPack),
 	ChangedMapAttribute,
 }
 
@@ -112,6 +121,12 @@ impl Component for Menu
 
 				true
 			},
+			Message::ChangedExpansionPack(expansion_pack) =>
+			{
+				self.filter.borrow_mut().set_expansion_pack(expansion_pack);
+				self.settings.send(Request::FilterChanged(self.filter.clone()));
+				false
+			},
 			Message::ChangedMapAttribute =>
 			{
 				self.settings.send(Request::FilterChanged(self.filter.clone()));
@@ -135,11 +150,11 @@ impl Component for Menu
 					<FilterMethodSelector
 						filter=self.filter.clone()
 					/>
-					<MapAttributeSetFilter<ExpansionPack>
-						title="Kiegészítő"
-						map_attribute_set=self.filter.borrow().expansion_pack()
-						is_incremental=true
-						changed=self.link.callback(|_| Message::ChangedMapAttribute)
+					<EnumFilter<ExpansionPack>
+						title="Szűrés módja"
+						values=ExpansionPack::values().copied().collect::<Vec<_>>()
+						current_value=ExpansionPack::values().skip(1).next().unwrap()
+						on_selected=self.link.callback(Message::ChangedExpansionPack)
 					/>
 					<MapAttributeSetFilter<WaterPresence>
 						title="Víz mennyisége"

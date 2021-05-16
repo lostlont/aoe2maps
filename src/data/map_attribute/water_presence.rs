@@ -6,7 +6,7 @@ use
 		result::Result,
 		slice::Iter,
 	},
-	super::MapAttribute,
+	super::{ EnumValues, MapAttribute },
 };
 
 #[derive(Clone, Eq, Hash, PartialEq)]
@@ -17,7 +17,7 @@ pub enum WaterPresence
 	Islands,
 }
 
-impl MapAttribute for WaterPresence
+impl EnumValues for WaterPresence
 {
 	fn values() -> Iter<'static, WaterPresence>
 	{
@@ -43,4 +43,8 @@ impl Display for WaterPresence
 
 		write!(formatter, "{}", description)
 	}
+}
+
+impl MapAttribute for WaterPresence
+{
 }

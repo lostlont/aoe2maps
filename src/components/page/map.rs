@@ -89,7 +89,7 @@ impl Map
 		}
 		else if !is_allowed
 		{
-			self.properties.state = match filter.filter_method()
+			self.properties.state = match filter.get_filter_method()
 			{
 				FilterMethod::Hide => State::Hidden,
 				FilterMethod::Disable => State::Disabled,

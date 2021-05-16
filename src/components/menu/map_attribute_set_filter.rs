@@ -3,6 +3,7 @@ use
 	std::
 	{
 		cell::RefCell,
+		collections::HashMap,
 		rc::Rc,
 	},
 	yew::prelude::*,
@@ -14,8 +15,8 @@ use
 			map_attribute::MapAttribute,
 			map_attribute_set::MapAttributeSet,
 		},
+		views::filter_checkbox::FilterCheckbox,
 	},
-	super::filter_entry::FilterEntry,
 };
 
 #[derive(Properties, Clone)]
@@ -33,17 +34,18 @@ where
 	pub changed: Callback<()>,
 }
 
+// TODO Replace MapAttributeSetFilter<T> with EnumFilter<T>!
 pub struct MapAttributeSetFilter<TMapAttribute>
 where
 	TMapAttribute: MapAttribute,
 {
 	properties: MapAttributeSetFilterProperties<TMapAttribute>,
-	link: ComponentLink<Self>,
+	checkboxes: HashMap<TMapAttribute, FilterCheckbox>,
 }
 
 pub enum Message<TMapAttribute>
 {
-	Toggled(TMapAttribute, bool),
+	Toggled(TMapAttribute),
 }
 
 impl<TMapAttribute> Component for MapAttributeSetFilter<TMapAttribute>
@@ -55,10 +57,15 @@ where
 
 	fn create(properties: Self::Properties, link: ComponentLink<Self>) -> Self
 	{
+		let checkboxes = TMapAttribute
+			::values()
+			.map(|a| (a.clone(), FilterCheckbox::new(&format!("{}", &a), link.callback(move |_| Message::Toggled(a.clone())))))
+			.collect();
+
 		Self
 		{
 			properties,
-			link,
+			checkboxes,
 		}
 	}
 
@@ -66,9 +73,10 @@ where
 	{
 		match message
 		{
-			Message::Toggled(map_attribute, is_allowed) =>
+			Message::Toggled(map_attribute) =>
 			{
 				let mut setter = self.properties.map_attribute_set.borrow_mut();
+				let is_allowed = !setter.contains(&map_attribute);
 
 				if self.properties.is_incremental
 				{
@@ -109,18 +117,16 @@ where
 
 	fn view(&self) -> Html
 	{
+		let is_checked = |attribute_value|
+		{
+			self.properties.map_attribute_set.borrow().contains(attribute_value)
+		};
+
 		html!
 		{
 			<Accordion title=&self.properties.title>
 			{
-				for TMapAttribute::values().map(|attribute_value| html!
-					{
-						<FilterEntry
-							name=format!("{}", attribute_value)
-							is_selected=self.properties.map_attribute_set.borrow().contains(&attribute_value)
-							toggled=self.link.callback(move |is_allowed| Message::Toggled(attribute_value.clone(), is_allowed))
-						/>
-					})
+				for self.checkboxes.iter().map(|(a, ch)| ch.render(is_checked(a)))
 			}
 			</Accordion>
 		}

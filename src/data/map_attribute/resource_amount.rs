@@ -6,7 +6,7 @@ use
 		result::Result,
 	},
 	core::slice::Iter,
-	crate::data::map_attribute::MapAttribute,
+	super::{ EnumValues, MapAttribute },
 };
 
 #[derive(Clone, Eq, Hash, PartialEq)]
@@ -30,7 +30,7 @@ impl ResourceAmount
 	}
 }
 
-impl MapAttribute for ResourceAmount
+impl EnumValues for ResourceAmount
 {
 	fn values() -> Iter<'static, ResourceAmount>
 	{
@@ -49,4 +49,8 @@ impl Display for ResourceAmount
 	{
 		write!(formatter, "{}", self.name())
 	}
+}
+
+impl MapAttribute for ResourceAmount
+{
 }

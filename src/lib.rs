@@ -11,6 +11,7 @@ use
 mod agents;
 mod components;
 mod data;
+mod views;
 
 #[wasm_bindgen(start)]
 pub fn run_app()

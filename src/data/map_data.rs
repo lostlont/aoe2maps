@@ -48,9 +48,9 @@ impl MapData
 		self.image
 	}
 
-	pub fn expansion_pack(&self) -> &ExpansionPack
+	pub fn expansion_pack(&self) -> ExpansionPack
 	{
-		&self.expansion_pack
+		self.expansion_pack
 	}
 
 	pub fn water_presence(&self) -> &WaterPresence

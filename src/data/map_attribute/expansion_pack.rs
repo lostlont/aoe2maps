@@ -6,10 +6,10 @@ use
 		result::Result,
 		slice::Iter,
 	},
-	super::MapAttribute,
+	super::{ EnumValues, MapAttribute },
 };
 
-#[derive(Clone, Eq, Hash, PartialEq)]
+#[derive(Copy, Clone, Eq, Hash, PartialEq, PartialOrd)]
 pub enum ExpansionPack
 {
 	TheAgeOfKings,
@@ -36,7 +36,7 @@ impl ExpansionPack
 	}
 }
 
-impl MapAttribute for ExpansionPack
+impl EnumValues for ExpansionPack
 {
 	fn values() -> Iter<'static, ExpansionPack>
 	{
@@ -58,4 +58,8 @@ impl Display for ExpansionPack
 	{
 		write!(formatter, "{}", self.name())
 	}
+}
+
+impl MapAttribute for ExpansionPack
+{
 }
