@@ -1,58 +1,44 @@
 // TODO Move to data?
 use
 {
-	std::
-	{
-		cell::RefCell,
-		iter::FromIterator,
-		rc::Rc,
-	},
+	std::iter::FromIterator,
 	crate::
 	{
 		data::
 		{
 			enum_values::EnumValues,
 			filter_method::FilterMethod,
-			map_attribute::{ ExpansionPack, MapAttribute, ResourceAmount, WaterPresence },
+			map_attribute::{ ExpansionPack, ResourceAmount, WaterPresence },
 			map_attribute_set::MapAttributeSet,
 			map_data::MapData,
 		},
 	},
 };
 
-type SharedSet<T> = Rc<RefCell<MapAttributeSet<T>>>;
-
 pub struct Filter
 {
 	filter_method: FilterMethod,
 	expansion_pack: ExpansionPack,
-	allowed_water_presence: SharedSet<WaterPresence>,
-	allowed_wood_amount: SharedSet<ResourceAmount>,
-	allowed_food_amount: SharedSet<ResourceAmount>,
-	allowed_gold_amount: SharedSet<ResourceAmount>,
-	allowed_stone_amount: SharedSet<ResourceAmount>,
+	allowed_water_presence: MapAttributeSet<WaterPresence>,
+	allowed_wood_amount: MapAttributeSet<ResourceAmount>,
+	allowed_food_amount: MapAttributeSet<ResourceAmount>,
+	allowed_gold_amount: MapAttributeSet<ResourceAmount>,
+	allowed_stone_amount: MapAttributeSet<ResourceAmount>,
 }
 
 impl Filter
 {
 	pub fn new() -> Self
 	{
-		fn from<T>() -> SharedSet<T>
-		where
-			T: MapAttribute,
-		{
-			Rc::new(RefCell::new(MapAttributeSet::from_iter(T::values().cloned())))
-		}
-
 		Self
 		{
 			filter_method: FilterMethod::Mixed,
 			expansion_pack: *ExpansionPack::values().last().unwrap(),
-			allowed_water_presence: from::<WaterPresence>(),
-			allowed_wood_amount: from::<ResourceAmount>(),
-			allowed_food_amount: from::<ResourceAmount>(),
-			allowed_gold_amount: from::<ResourceAmount>(),
-			allowed_stone_amount: from::<ResourceAmount>(),
+			allowed_water_presence: MapAttributeSet::from_iter(WaterPresence::values().cloned()),
+			allowed_wood_amount: MapAttributeSet::from_iter(ResourceAmount::values().cloned()),
+			allowed_food_amount: MapAttributeSet::from_iter(ResourceAmount::values().cloned()),
+			allowed_gold_amount: MapAttributeSet::from_iter(ResourceAmount::values().cloned()),
+			allowed_stone_amount: MapAttributeSet::from_iter(ResourceAmount::values().cloned()),
 		}
 	}
 
@@ -66,29 +52,54 @@ impl Filter
 		self.expansion_pack = expansion_pack;
 	}
 
-	pub fn water_presence(&self) -> SharedSet<WaterPresence>
+	pub fn is_allowed_water_presence(&self, water_presence: WaterPresence) -> bool
 	{
-		self.allowed_water_presence.clone()
+		self.allowed_water_presence.contains(water_presence)
 	}
 
-	pub fn wood_amount(&self) -> SharedSet<ResourceAmount>
+	pub fn toggle_allowed_water_presence(&mut self, water_presence: WaterPresence)
 	{
-		self.allowed_wood_amount.clone()
+		self.allowed_water_presence.toggle(water_presence);
 	}
 
-	pub fn food_amount(&self) -> SharedSet<ResourceAmount>
+	pub fn is_allowed_wood_amount(&self, wood_amount: ResourceAmount) -> bool
 	{
-		self.allowed_food_amount.clone()
+		self.allowed_wood_amount.contains(wood_amount)
 	}
 
-	pub fn gold_amount(&self) -> SharedSet<ResourceAmount>
+	pub fn toggle_allowed_wood_amount(&mut self, wood_amount: ResourceAmount)
 	{
-		self.allowed_gold_amount.clone()
+		self.allowed_wood_amount.toggle(wood_amount);
 	}
 
-	pub fn stone_amount(&self) -> SharedSet<ResourceAmount>
+	pub fn is_allowed_food_amount(&self, food_amount: ResourceAmount) -> bool
 	{
-		self.allowed_stone_amount.clone()
+		self.allowed_food_amount.contains(food_amount)
+	}
+
+	pub fn toggle_allowed_food_amount(&mut self, food_amount: ResourceAmount)
+	{
+		self.allowed_food_amount.toggle(food_amount);
+	}
+
+	pub fn is_allowed_gold_amount(&self, gold_amount: ResourceAmount) -> bool
+	{
+		self.allowed_gold_amount.contains(gold_amount)
+	}
+
+	pub fn toggle_allowed_gold_amount(&mut self, gold_amount: ResourceAmount)
+	{
+		self.allowed_gold_amount.toggle(gold_amount);
+	}
+
+	pub fn is_allowed_stone_amount(&self, stone_amount: ResourceAmount) -> bool
+	{
+		self.allowed_stone_amount.contains(stone_amount)
+	}
+
+	pub fn toggle_allowed_stone_amount(&mut self, stone_amount: ResourceAmount)
+	{
+		self.allowed_stone_amount.toggle(stone_amount);
 	}
 }
 
@@ -126,10 +137,10 @@ impl FilterView for Filter
 
 	fn is_allowed_by_others(&self, map_data: &MapData) -> bool
 	{
-		self.allowed_water_presence.borrow().contains(map_data.water_presence()) &&
-		self.allowed_wood_amount.borrow().contains(map_data.wood_amount()) &&
-		self.allowed_food_amount.borrow().contains(map_data.food_amount()) &&
-		self.allowed_gold_amount.borrow().contains(map_data.gold_amount()) &&
-		self.allowed_stone_amount.borrow().contains(map_data.stone_amount())
+		self.allowed_water_presence.contains(map_data.water_presence()) &&
+		self.allowed_wood_amount.contains(map_data.wood_amount()) &&
+		self.allowed_food_amount.contains(map_data.food_amount()) &&
+		self.allowed_gold_amount.contains(map_data.gold_amount()) &&
+		self.allowed_stone_amount.contains(map_data.stone_amount())
 	}
 }

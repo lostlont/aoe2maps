@@ -5,6 +5,7 @@ use
 		cell::RefCell,
 		rc::Rc,
 	},
+	closure::closure,
 	yew::
 	{
 		prelude::*,
@@ -14,7 +15,7 @@ use
 	{
 		agents::
 		{
-			filter::Filter,
+			filter::{ Filter, FilterView },
 			settings::{ MenuState, Request, Settings },
 		},
 		components::
@@ -22,17 +23,16 @@ use
 			menu::
 			{
 				enum_filter::EnumFilter,
-				filter_method_selector::FilterMethodSelector,
+				enum_set_filter::EnumSetFilter,
 			},
 			utils::hamburger::Hamburger,
 		},
 		data::
 		{
-			enum_values::EnumValues,
+			filter_method::FilterMethod,
 			map_attribute::{ ExpansionPack, ResourceAmount, WaterPresence },
 		},
 	},
-	super::map_attribute_set_filter::MapAttributeSetFilter,
 };
 
 #[derive(PartialEq)]
@@ -46,6 +46,13 @@ pub struct Menu
 {
 	link: ComponentLink<Self>,
 	settings: Dispatcher<Settings>,
+	filter_method_filter: EnumFilter<FilterMethod>,
+	expansion_pack_filter: EnumFilter<ExpansionPack>,
+	water_presence_filter: EnumSetFilter<WaterPresence>,
+	wood_amount_filter: EnumSetFilter<ResourceAmount>,
+	food_amount_filter: EnumSetFilter<ResourceAmount>,
+	gold_amount_filter: EnumSetFilter<ResourceAmount>,
+	stone_amount_filter: EnumSetFilter<ResourceAmount>,
 	state: State,
 	filter: Rc<RefCell<Filter>>,
 }
@@ -69,8 +76,9 @@ impl Menu
 pub enum Message
 {
 	ToggleState,
+	ChangedFilterMethod(FilterMethod),
 	ChangedExpansionPack(ExpansionPack),
-	ChangedMapAttribute,
+	ChangedMapAttribute{ repaint: bool },
 }
 
 impl Component for Menu
@@ -91,12 +99,66 @@ impl Component for Menu
 			false => State::Open,
 		};
 
+		let filter = Rc::new(RefCell::new(Filter::new()));
 		Self
 		{
-			link,
+			link: link.clone(),
 			settings: Settings::dispatcher(),
+			filter_method_filter: EnumFilter::new(
+				"Szűrés módja".to_string(),
+				Rc::new(closure!(clone filter, || filter.borrow().get_filter_method())),
+				Rc::new(closure!(clone link, |v| link.send_message(Message::ChangedFilterMethod(v))))),
+			expansion_pack_filter: EnumFilter::new(
+				"Kiegészítő".to_string(),
+				Rc::new(closure!(clone filter, || filter.borrow().get_expansion_pack())),
+				Rc::new(closure!(clone link, |v| link.send_message(Message::ChangedExpansionPack(v))))),
+			water_presence_filter: EnumSetFilter::new(
+				"Víz mennyisége".to_string(),
+				Rc::new(closure!(clone filter, |a| filter.borrow().is_allowed_water_presence(a))),
+				Rc::new(closure!(clone filter, clone link, |a|
+					{
+						filter.borrow_mut().toggle_allowed_water_presence(a);
+						link.send_message(Message::ChangedMapAttribute{ repaint: true });
+					})),
+			),
+			wood_amount_filter: EnumSetFilter::new(
+				"Fa mennyisége".to_string(),
+				Rc::new(closure!(clone filter, |a| filter.borrow().is_allowed_wood_amount(a))),
+				Rc::new(closure!(clone filter, clone link, |a|
+					{
+						filter.borrow_mut().toggle_allowed_wood_amount(a);
+						link.send_message(Message::ChangedMapAttribute{ repaint: true });
+					})),
+			),
+			food_amount_filter: EnumSetFilter::new(
+				"Táplálék mennyisége".to_string(),
+				Rc::new(closure!(clone filter, |a| filter.borrow().is_allowed_food_amount(a))),
+				Rc::new(closure!(clone filter, clone link, |a|
+					{
+						filter.borrow_mut().toggle_allowed_food_amount(a);
+						link.send_message(Message::ChangedMapAttribute{ repaint: true });
+					})),
+			),
+			gold_amount_filter: EnumSetFilter::new(
+				"Arany mennyisége".to_string(),
+				Rc::new(closure!(clone filter, |a| filter.borrow().is_allowed_gold_amount(a))),
+				Rc::new(closure!(clone filter, clone link, |a|
+					{
+						filter.borrow_mut().toggle_allowed_gold_amount(a);
+						link.send_message(Message::ChangedMapAttribute{ repaint: true });
+					})),
+			),
+			stone_amount_filter: EnumSetFilter::new(
+				"Kő mennyisége".to_string(),
+				Rc::new(closure!(clone filter, |a| filter.borrow().is_allowed_stone_amount(a))),
+				Rc::new(closure!(clone filter, clone link, |a|
+					{
+						filter.borrow_mut().toggle_allowed_stone_amount(a);
+						link.send_message(Message::ChangedMapAttribute{ repaint: true });
+					})),
+			),
 			state,
-			filter: Rc::new(RefCell::new(Filter::new())),
+			filter,
 		}
 	}
 
@@ -121,16 +183,22 @@ impl Component for Menu
 
 				true
 			},
+			Message::ChangedFilterMethod(filter_method) =>
+			{
+				self.filter.borrow_mut().set_filter_method(filter_method);
+				self.settings.send(Request::FilterChanged(self.filter.clone()));
+				true
+			},
 			Message::ChangedExpansionPack(expansion_pack) =>
 			{
 				self.filter.borrow_mut().set_expansion_pack(expansion_pack);
 				self.settings.send(Request::FilterChanged(self.filter.clone()));
-				false
+				true
 			},
-			Message::ChangedMapAttribute =>
+			Message::ChangedMapAttribute{repaint} =>
 			{
 				self.settings.send(Request::FilterChanged(self.filter.clone()));
-				false
+				repaint
 			},
 		}
 	}
@@ -147,40 +215,13 @@ impl Component for Menu
 			<div class=self.class()>
 				<Hamburger clicked=self.link.callback(|_| Message::ToggleState) />
 				<div class="content">
-					<FilterMethodSelector
-						filter=self.filter.clone()
-					/>
-					<EnumFilter<ExpansionPack>
-						title="Szűrés módja"
-						values=ExpansionPack::values().copied().collect::<Vec<_>>()
-						current_value=ExpansionPack::values().skip(1).next().unwrap()
-						on_selected=self.link.callback(Message::ChangedExpansionPack)
-					/>
-					<MapAttributeSetFilter<WaterPresence>
-						title="Víz mennyisége"
-						map_attribute_set=self.filter.borrow().water_presence()
-						changed=self.link.callback(|_| Message::ChangedMapAttribute)
-					/>
-					<MapAttributeSetFilter<ResourceAmount>
-						title="Fa mennyisége"
-						map_attribute_set=self.filter.borrow().wood_amount()
-						changed=self.link.callback(|_| Message::ChangedMapAttribute)
-					/>
-					<MapAttributeSetFilter<ResourceAmount>
-						title="Táplálék mennyisége"
-						map_attribute_set=self.filter.borrow().food_amount()
-						changed=self.link.callback(|_| Message::ChangedMapAttribute)
-					/>
-					<MapAttributeSetFilter<ResourceAmount>
-						title="Arany mennyisége"
-						map_attribute_set=self.filter.borrow().gold_amount()
-						changed=self.link.callback(|_| Message::ChangedMapAttribute)
-					/>
-					<MapAttributeSetFilter<ResourceAmount>
-						title="Kő mennyisége"
-						map_attribute_set=self.filter.borrow().stone_amount()
-						changed=self.link.callback(|_| Message::ChangedMapAttribute)
-					/>
+				{ self.filter_method_filter.render() }
+				{ self.expansion_pack_filter.render() }
+				{ self.water_presence_filter.render() }
+				{ self.wood_amount_filter.render() }
+				{ self.food_amount_filter.render() }
+				{ self.gold_amount_filter.render() }
+				{ self.stone_amount_filter.render() }
 				</div>
 			</div>
 		}

@@ -19,20 +19,20 @@ impl<T> MapAttributeSet<T>
 where
 	T: MapAttribute,
 {
-	pub fn contains(&self, value: &T) -> bool
+	pub fn contains(&self, attribute: T) -> bool
 	{
-		self.values.contains(value)
+		self.values.contains(&attribute)
 	}
 
-	pub fn set(&mut self, attribute: T, is_allowed: bool)
+	pub fn toggle(&mut self, attribute: T)
 	{
-		if is_allowed && !self.values.contains(&attribute)
-		{
-			self.values.insert(attribute);
-		}
-		else if !is_allowed && self.values.contains(&attribute)
+		if self.values.contains(&attribute)
 		{
 			self.values.remove(&attribute);
+		}
+		else
+		{
+			self.values.insert(attribute);
 		}
 	}
 }

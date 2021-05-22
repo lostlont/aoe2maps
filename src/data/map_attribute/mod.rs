@@ -19,7 +19,7 @@ pub use
 	water_presence::WaterPresence,
 };
 
-pub trait MapAttribute : Clone + Display + EnumValues + Eq + Hash + 'static
+pub trait MapAttribute : Clone + Copy + Display + EnumValues + Eq + Hash + 'static
 where
 	Self: Sized,
 {

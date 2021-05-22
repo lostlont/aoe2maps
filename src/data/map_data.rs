@@ -53,28 +53,28 @@ impl MapData
 		self.expansion_pack
 	}
 
-	pub fn water_presence(&self) -> &WaterPresence
+	pub fn water_presence(&self) -> WaterPresence
 	{
-		&self.water_presence
+		self.water_presence
 	}
 
-	pub fn wood_amount(&self) -> &ResourceAmount
+	pub fn wood_amount(&self) -> ResourceAmount
 	{
-		&self.wood_amount
+		self.wood_amount
 	}
 
-	pub fn food_amount(&self) -> &ResourceAmount
+	pub fn food_amount(&self) -> ResourceAmount
 	{
-		&self.food_amount
+		self.food_amount
 	}
 
-	pub fn gold_amount(&self) -> &ResourceAmount
+	pub fn gold_amount(&self) -> ResourceAmount
 	{
-		&self.gold_amount
+		self.gold_amount
 	}
 
-	pub fn stone_amount(&self) -> &ResourceAmount
+	pub fn stone_amount(&self) -> ResourceAmount
 	{
-		&self.stone_amount
+		self.stone_amount
 	}
 }

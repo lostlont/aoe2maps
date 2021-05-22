@@ -6,29 +6,34 @@ use
 pub struct FilterCheckbox
 {
 	name: String,
-	on_click: Callback<MouseEvent>,
+	is_checked: Box<dyn Fn() -> bool>,
+	toggle: Callback<MouseEvent>,
 }
 
 impl FilterCheckbox
 {
-	pub fn new(name: &str, on_click: Callback<()>) -> Self
+	pub fn new(name: &str, is_checked: Box<dyn Fn() -> bool>, toggle: Box<dyn Fn()>) -> Self
 	{
 		Self
 		{
 			name: name.to_string(),
-			on_click: Callback::from(move |_| on_click.emit(())),
+			is_checked,
+			toggle: Callback::from(move |_| (*toggle)()),
 		}
 	}
+}
 
-	pub fn render(&self, is_checked: bool) -> Html
+impl Renderable for FilterCheckbox
+{
+	fn render(&self) -> Html
 	{
 		html!
 		{
 			<label>
 				<input
 					type="checkbox"
-					checked=is_checked
-					onclick=self.on_click.clone()
+					checked=(*self.is_checked)()
+					onclick=self.toggle.clone()
 				/>
 				{ &self.name }
 			</label>

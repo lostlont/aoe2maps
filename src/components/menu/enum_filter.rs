@@ -4,90 +4,65 @@ use
 	{
 		fmt::Display,
 		hash::Hash,
+		rc::Rc,
 	},
 	yew::prelude::*,
 	crate::
 	{
 		components::utils::accordion::Accordion,
+		data::enum_values::EnumValues,
 		views::filter_radio_button::FilterRadioButton,
 	},
 };
-
-#[derive(Clone, Properties)]
-pub struct Properties<TEnum>
-where
-	TEnum: Clone,
-{
-	pub title: String,
-	pub values: Vec<TEnum>,
-	pub current_value: TEnum,
-	pub on_selected: Callback<TEnum>,
-}
 
 pub struct EnumFilter<TEnum>
 where
 	TEnum: Clone,
 {
-	properties: Properties<TEnum>,
+	title: String,
 	buttons: Vec<(TEnum, FilterRadioButton)>,
 }
 
 impl<TEnum> EnumFilter<TEnum>
 where
-	TEnum: Clone + Copy + Display + Eq + Hash + 'static,
+	TEnum: Clone + Copy + Display + EnumValues + Eq + Hash + 'static,
 {
-	fn register_button(value: TEnum, link: &ComponentLink<Self>) -> FilterRadioButton
+	pub fn new(title: String, get_value: Rc<dyn Fn() -> TEnum>, set_value: Rc<dyn Fn(TEnum)>) -> Self
 	{
-		let name = format!("{}", value);
-		FilterRadioButton::new(&name, link.callback(move |_| value))
-	}
-}
-
-impl<TEnum> Component for EnumFilter<TEnum>
-where
-	TEnum: Clone + Copy + Display + Eq + Hash + 'static,
-{
-	type Message = TEnum;
-	type Properties = Properties<TEnum>;
-
-	fn create(properties: Self::Properties, link: ComponentLink<Self>) -> Self
-	{
-		let values = properties.values
-			.iter()
+		let values = TEnum
+			::values()
 			.copied();
-		let buttons = properties.values
-			.iter()
-			.map(|v| Self::register_button(*v, &link));
+		let buttons = TEnum
+			::values()
+			.map(|v| Self::create_button(*v, get_value.clone(), set_value.clone()));
 		let buttons = values
 			.zip(buttons)
 			.collect();
 
 		Self
 		{
-			properties,
+			title,
 			buttons,
 		}
 	}
 
-	fn update(&mut self, message: Self::Message) -> ShouldRender
+	fn create_button(value: TEnum, get_value: Rc<dyn Fn() -> TEnum>, set_value: Rc<dyn Fn(TEnum)>) -> FilterRadioButton
 	{
-		self.properties.current_value = message;
-		self.properties.on_selected.emit(message);
-		true
+		let name = format!("{}", value);
+		let is_checked = Box::new(move || get_value() == value);
+		let toggle = Box::new(move || set_value(value));
+		FilterRadioButton::new(&name, is_checked, toggle)
 	}
 
-	fn change(&mut self, _: Self::Properties) -> ShouldRender
-	{
-		false
-	}
-
-	fn view(&self) -> Html
+	pub fn render(&self) -> Html
 	{
 		html!
 		{
-			<Accordion title=&self.properties.title>
+			<Accordion title=&self.title>
 			{
-				for self.buttons.iter().map(|(v, rb)| rb.render(self.properties.current_value == *v))
+				for self.buttons
+					.iter()
+					.map(|(v, rb)| rb.render())
 			}
 			</Accordion>
 		}
