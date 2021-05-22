@@ -70,7 +70,6 @@ impl Map
 		html!
 		{
 			<ul>
-				<li>{ self.properties.map_data.water_presence() }</li>
 				<li>{ "Fa: " }{ self.properties.map_data.wood_amount() }</li>
 				<li>{ "Táplálék: " }{ self.properties.map_data.food_amount() }</li>
 				<li>{ "Arany: " }{ self.properties.map_data.gold_amount() }</li>

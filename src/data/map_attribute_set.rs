@@ -3,7 +3,7 @@ use
 	std::
 	{
 		collections::HashSet,
-		iter::FromIterator,
+		iter::{ FromIterator, IntoIterator },
 	},
 	super::map_attribute::MapAttribute,
 };
@@ -19,9 +19,23 @@ impl<T> MapAttributeSet<T>
 where
 	T: MapAttribute,
 {
+	pub fn new() -> Self
+	{
+		Self
+		{
+			values: HashSet::default(),
+		}
+	}
+
 	pub fn contains(&self, attribute: T) -> bool
 	{
 		self.values.contains(&attribute)
+	}
+
+	pub fn matches(&self, attributes: &HashSet<T>) -> bool
+	{
+		self.values.is_empty() ||
+		self.values.iter().any(|v| attributes.contains(v))
 	}
 
 	pub fn toggle(&mut self, attribute: T)

@@ -30,7 +30,7 @@ use
 		data::
 		{
 			filter_method::FilterMethod,
-			map_attribute::{ ExpansionPack, ResourceAmount, WaterPresence },
+			map_attribute::{ ExpansionPack, MapCategory, ResourceAmount },
 		},
 	},
 };
@@ -48,7 +48,7 @@ pub struct Menu
 	settings: Dispatcher<Settings>,
 	filter_method_filter: EnumFilter<FilterMethod>,
 	expansion_pack_filter: EnumFilter<ExpansionPack>,
-	water_presence_filter: EnumSetFilter<WaterPresence>,
+	map_categories_filter: EnumSetFilter<MapCategory>,
 	wood_amount_filter: EnumSetFilter<ResourceAmount>,
 	food_amount_filter: EnumSetFilter<ResourceAmount>,
 	gold_amount_filter: EnumSetFilter<ResourceAmount>,
@@ -112,12 +112,12 @@ impl Component for Menu
 				"Kiegészítő".to_string(),
 				Rc::new(closure!(clone filter, || filter.borrow().get_expansion_pack())),
 				Rc::new(closure!(clone link, |v| link.send_message(Message::ChangedExpansionPack(v))))),
-			water_presence_filter: EnumSetFilter::new(
-				"Víz mennyisége".to_string(),
-				Rc::new(closure!(clone filter, |a| filter.borrow().is_allowed_water_presence(a))),
+			map_categories_filter: EnumSetFilter::new(
+				"Kategóriák".to_string(),
+				Rc::new(closure!(clone filter, |a| filter.borrow().is_allowed_map_category(a))),
 				Rc::new(closure!(clone filter, clone link, |a|
 					{
-						filter.borrow_mut().toggle_allowed_water_presence(a);
+						filter.borrow_mut().toggle_allowed_map_category(a);
 						link.send_message(Message::ChangedMapAttribute{ repaint: true });
 					})),
 			),
@@ -217,7 +217,7 @@ impl Component for Menu
 				<div class="content">
 				{ self.filter_method_filter.render() }
 				{ self.expansion_pack_filter.render() }
-				{ self.water_presence_filter.render() }
+				{ self.map_categories_filter.render() }
 				{ self.wood_amount_filter.render() }
 				{ self.food_amount_filter.render() }
 				{ self.gold_amount_filter.render() }

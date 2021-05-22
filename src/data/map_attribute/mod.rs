@@ -10,13 +10,13 @@ use
 };
 
 mod expansion_pack;
+mod map_category;
 mod resource_amount;
-mod water_presence;
 pub use
 {
 	expansion_pack::ExpansionPack,
+	map_category::MapCategory,
 	resource_amount::ResourceAmount,
-	water_presence::WaterPresence,
 };
 
 pub trait MapAttribute : Clone + Copy + Display + EnumValues + Eq + Hash + 'static

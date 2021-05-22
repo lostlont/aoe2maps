@@ -8,7 +8,7 @@ use
 		{
 			enum_values::EnumValues,
 			filter_method::FilterMethod,
-			map_attribute::{ ExpansionPack, ResourceAmount, WaterPresence },
+			map_attribute::{ ExpansionPack, MapCategory, ResourceAmount },
 			map_attribute_set::MapAttributeSet,
 			map_data::MapData,
 		},
@@ -19,7 +19,7 @@ pub struct Filter
 {
 	filter_method: FilterMethod,
 	expansion_pack: ExpansionPack,
-	allowed_water_presence: MapAttributeSet<WaterPresence>,
+	allowed_map_categories: MapAttributeSet<MapCategory>,
 	allowed_wood_amount: MapAttributeSet<ResourceAmount>,
 	allowed_food_amount: MapAttributeSet<ResourceAmount>,
 	allowed_gold_amount: MapAttributeSet<ResourceAmount>,
@@ -34,7 +34,7 @@ impl Filter
 		{
 			filter_method: FilterMethod::Mixed,
 			expansion_pack: *ExpansionPack::values().last().unwrap(),
-			allowed_water_presence: MapAttributeSet::from_iter(WaterPresence::values().cloned()),
+			allowed_map_categories: MapAttributeSet::new(),
 			allowed_wood_amount: MapAttributeSet::from_iter(ResourceAmount::values().cloned()),
 			allowed_food_amount: MapAttributeSet::from_iter(ResourceAmount::values().cloned()),
 			allowed_gold_amount: MapAttributeSet::from_iter(ResourceAmount::values().cloned()),
@@ -52,14 +52,14 @@ impl Filter
 		self.expansion_pack = expansion_pack;
 	}
 
-	pub fn is_allowed_water_presence(&self, water_presence: WaterPresence) -> bool
+	pub fn is_allowed_map_category(&self, map_category: MapCategory) -> bool
 	{
-		self.allowed_water_presence.contains(water_presence)
+		self.allowed_map_categories.contains(map_category)
 	}
 
-	pub fn toggle_allowed_water_presence(&mut self, water_presence: WaterPresence)
+	pub fn toggle_allowed_map_category(&mut self, map_category: MapCategory)
 	{
-		self.allowed_water_presence.toggle(water_presence);
+		self.allowed_map_categories.toggle(map_category);
 	}
 
 	pub fn is_allowed_wood_amount(&self, wood_amount: ResourceAmount) -> bool
@@ -132,12 +132,12 @@ impl FilterView for Filter
 
 	fn is_allowed_by_expansion_pack(&self, map_data: &MapData) -> bool
 	{
-		map_data.expansion_pack() <= self.get_expansion_pack()
+		map_data.expansion_pack() <= self.expansion_pack
 	}
 
 	fn is_allowed_by_others(&self, map_data: &MapData) -> bool
 	{
-		self.allowed_water_presence.contains(map_data.water_presence()) &&
+		self.allowed_map_categories.matches(map_data.map_categories()) &&
 		self.allowed_wood_amount.contains(map_data.wood_amount()) &&
 		self.allowed_food_amount.contains(map_data.food_amount()) &&
 		self.allowed_gold_amount.contains(map_data.gold_amount()) &&
