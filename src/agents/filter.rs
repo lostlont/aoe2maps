@@ -1,17 +1,13 @@
 // TODO Move to data?
 use
 {
-	std::iter::FromIterator,
-	crate::
+	crate::data::
 	{
-		data::
-		{
-			enum_values::EnumValues,
-			filter_method::FilterMethod,
-			map_attribute::{ ExpansionPack, MapCategory, ResourceAmount },
-			map_attribute_set::MapAttributeSet,
-			map_data::MapData,
-		},
+		enum_values::EnumValues,
+		filter_method::FilterMethod,
+		map_attribute::{ ExpansionPack, MapCategory, ResourceAmount },
+		map_attribute_set::MapAttributeSet,
+		map_data::MapData,
 	},
 };
 
@@ -35,10 +31,10 @@ impl Filter
 			filter_method: FilterMethod::Mixed,
 			expansion_pack: *ExpansionPack::values().last().unwrap(),
 			allowed_map_categories: MapAttributeSet::new(),
-			allowed_wood_amount: MapAttributeSet::from_iter(ResourceAmount::values().cloned()),
-			allowed_food_amount: MapAttributeSet::from_iter(ResourceAmount::values().cloned()),
-			allowed_gold_amount: MapAttributeSet::from_iter(ResourceAmount::values().cloned()),
-			allowed_stone_amount: MapAttributeSet::from_iter(ResourceAmount::values().cloned()),
+			allowed_wood_amount: MapAttributeSet::new(),
+			allowed_food_amount: MapAttributeSet::new(),
+			allowed_gold_amount: MapAttributeSet::new(),
+			allowed_stone_amount: MapAttributeSet::new(),
 		}
 	}
 
@@ -137,10 +133,10 @@ impl FilterView for Filter
 
 	fn is_allowed_by_others(&self, map_data: &MapData) -> bool
 	{
-		self.allowed_map_categories.matches(map_data.map_categories()) &&
-		self.allowed_wood_amount.contains(map_data.wood_amount()) &&
-		self.allowed_food_amount.contains(map_data.food_amount()) &&
-		self.allowed_gold_amount.contains(map_data.gold_amount()) &&
-		self.allowed_stone_amount.contains(map_data.stone_amount())
+		self.allowed_map_categories.matches_any(map_data.map_categories()) &&
+		self.allowed_wood_amount.matches(map_data.wood_amount()) &&
+		self.allowed_food_amount.matches(map_data.food_amount()) &&
+		self.allowed_gold_amount.matches(map_data.gold_amount()) &&
+		self.allowed_stone_amount.matches(map_data.stone_amount())
 	}
 }

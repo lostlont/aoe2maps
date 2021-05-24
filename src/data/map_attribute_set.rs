@@ -1,10 +1,6 @@
 use
 {
-	std::
-	{
-		collections::HashSet,
-		iter::{ FromIterator, IntoIterator },
-	},
+	std::collections::HashSet,
 	super::map_attribute::MapAttribute,
 };
 
@@ -23,7 +19,7 @@ where
 	{
 		Self
 		{
-			values: HashSet::default(),
+			values: HashSet::new(),
 		}
 	}
 
@@ -32,7 +28,13 @@ where
 		self.values.contains(&attribute)
 	}
 
-	pub fn matches(&self, attributes: &HashSet<T>) -> bool
+	pub fn matches(&self, attribute: T) -> bool
+	{
+		self.values.is_empty() ||
+		self.values.contains(&attribute)
+	}
+
+	pub fn matches_any(&self, attributes: &HashSet<T>) -> bool
 	{
 		self.values.is_empty() ||
 		self.values.iter().any(|v| attributes.contains(v))
@@ -47,21 +49,6 @@ where
 		else
 		{
 			self.values.insert(attribute);
-		}
-	}
-}
-
-impl<T> FromIterator<T> for MapAttributeSet<T>
-where
-	T: MapAttribute,
-{
-	fn from_iter<TIter>(into_iterator: TIter) -> Self
-	where
-		TIter: IntoIterator<Item = T>,
-	{
-		Self
-		{
-			values: HashSet::from_iter(into_iterator),
 		}
 	}
 }
