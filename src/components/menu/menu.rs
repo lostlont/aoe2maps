@@ -3,6 +3,8 @@ use
 	std::
 	{
 		cell::RefCell,
+		fmt::Display,
+		hash::Hash,
 		rc::Rc,
 	},
 	closure::closure,
@@ -29,6 +31,7 @@ use
 		},
 		data::
 		{
+			enum_values::EnumValues,
 			filter_method::FilterMethod,
 			map_attribute::{ ExpansionPack, MapCategory, ResourceAmount },
 		},
@@ -71,14 +74,52 @@ impl Menu
 
 		classes.join(" ")
 	}
+
+	fn create_enum_filter<T>(
+		filter: &Rc<RefCell<Filter>>,
+		link: &ComponentLink<Self>,
+		title: &str,
+		get_value: impl Fn(&Filter) -> T + 'static,
+		set_value: impl Fn(&mut Filter, T) + 'static)
+		-> EnumFilter<T>
+	where
+		T: Copy + Display + EnumValues + Eq + Hash + 'static,
+	{
+		EnumFilter::new(
+			title.to_string(),
+			Rc::new(closure!(clone filter, || get_value(&filter.borrow()))),
+			Rc::new(closure!(clone filter, clone link, |v|
+				{
+					set_value(&mut *filter.borrow_mut(), v);
+					link.send_message(Message::ChangedFilter{ repaint: true });
+				})))
+	}
+
+	fn create_enum_set_filter<T>(
+		filter: &Rc<RefCell<Filter>>,
+		link: &ComponentLink<Self>,
+		title: &str,
+		get_value: impl Fn(&Filter, T) -> bool + 'static,
+		set_value: impl Fn(&mut Filter, T) + 'static)
+		-> EnumSetFilter<T>
+	where
+		T: Copy + Display + EnumValues + Eq + Hash + 'static,
+	{
+		EnumSetFilter::new(
+			title.to_string(),
+			Rc::new(closure!(clone filter, |a| get_value(&filter.borrow(), a))),
+			Rc::new(closure!(clone filter, clone link, |a|
+				{
+					set_value(&mut *filter.borrow_mut(), a);
+					link.send_message(Message::ChangedFilter{ repaint: false });
+				})))
+	}
 }
 
 pub enum Message
 {
 	ToggleState,
-	ChangedFilterMethod(FilterMethod),
-	ChangedExpansionPack(ExpansionPack),
-	ChangedMapAttribute{ repaint: bool },
+	ChangedFilter{ repaint: bool },
 }
 
 impl Component for Menu
@@ -104,59 +145,13 @@ impl Component for Menu
 		{
 			link: link.clone(),
 			settings: Settings::dispatcher(),
-			filter_method_filter: EnumFilter::new(
-				"Szűrés módja".to_string(),
-				Rc::new(closure!(clone filter, || filter.borrow().get_filter_method())),
-				Rc::new(closure!(clone link, |v| link.send_message(Message::ChangedFilterMethod(v))))),
-			expansion_pack_filter: EnumFilter::new(
-				"Kiegészítő".to_string(),
-				Rc::new(closure!(clone filter, || filter.borrow().get_expansion_pack())),
-				Rc::new(closure!(clone link, |v| link.send_message(Message::ChangedExpansionPack(v))))),
-			map_categories_filter: EnumSetFilter::new(
-				"Kategóriák".to_string(),
-				Rc::new(closure!(clone filter, |a| filter.borrow().is_allowed_map_category(a))),
-				Rc::new(closure!(clone filter, clone link, |a|
-					{
-						filter.borrow_mut().toggle_allowed_map_category(a);
-						link.send_message(Message::ChangedMapAttribute{ repaint: true });
-					})),
-			),
-			wood_amount_filter: EnumSetFilter::new(
-				"Fa mennyisége".to_string(),
-				Rc::new(closure!(clone filter, |a| filter.borrow().is_allowed_wood_amount(a))),
-				Rc::new(closure!(clone filter, clone link, |a|
-					{
-						filter.borrow_mut().toggle_allowed_wood_amount(a);
-						link.send_message(Message::ChangedMapAttribute{ repaint: true });
-					})),
-			),
-			food_amount_filter: EnumSetFilter::new(
-				"Táplálék mennyisége".to_string(),
-				Rc::new(closure!(clone filter, |a| filter.borrow().is_allowed_food_amount(a))),
-				Rc::new(closure!(clone filter, clone link, |a|
-					{
-						filter.borrow_mut().toggle_allowed_food_amount(a);
-						link.send_message(Message::ChangedMapAttribute{ repaint: true });
-					})),
-			),
-			gold_amount_filter: EnumSetFilter::new(
-				"Arany mennyisége".to_string(),
-				Rc::new(closure!(clone filter, |a| filter.borrow().is_allowed_gold_amount(a))),
-				Rc::new(closure!(clone filter, clone link, |a|
-					{
-						filter.borrow_mut().toggle_allowed_gold_amount(a);
-						link.send_message(Message::ChangedMapAttribute{ repaint: true });
-					})),
-			),
-			stone_amount_filter: EnumSetFilter::new(
-				"Kő mennyisége".to_string(),
-				Rc::new(closure!(clone filter, |a| filter.borrow().is_allowed_stone_amount(a))),
-				Rc::new(closure!(clone filter, clone link, |a|
-					{
-						filter.borrow_mut().toggle_allowed_stone_amount(a);
-						link.send_message(Message::ChangedMapAttribute{ repaint: true });
-					})),
-			),
+			filter_method_filter: Self::create_enum_filter(&filter, &link, "Szűrés módja", Filter::get_filter_method, Filter::set_filter_method),
+			expansion_pack_filter: Self::create_enum_filter(&filter, &link, "Kiegészítő", Filter::get_expansion_pack, Filter::set_expansion_pack),
+			map_categories_filter: Self::create_enum_set_filter(&filter, &link, "Kategóriák", Filter::is_allowed_map_category, Filter::toggle_allowed_map_category),
+			wood_amount_filter: Self::create_enum_set_filter(&filter, &link, "Fa mennyisége", Filter::is_allowed_wood_amount, Filter::toggle_allowed_wood_amount),
+			food_amount_filter: Self::create_enum_set_filter(&filter, &link, "Táplálék mennyisége", Filter::is_allowed_food_amount, Filter::toggle_allowed_food_amount),
+			gold_amount_filter: Self::create_enum_set_filter(&filter, &link, "Arany mennyisége", Filter::is_allowed_gold_amount, Filter::toggle_allowed_gold_amount),
+			stone_amount_filter: Self::create_enum_set_filter(&filter, &link, "Kő mennyisége", Filter::is_allowed_stone_amount, Filter::toggle_allowed_stone_amount),
 			state,
 			filter,
 		}
@@ -183,19 +178,7 @@ impl Component for Menu
 
 				true
 			},
-			Message::ChangedFilterMethod(filter_method) =>
-			{
-				self.filter.borrow_mut().set_filter_method(filter_method);
-				self.settings.send(Request::FilterChanged(self.filter.clone()));
-				true
-			},
-			Message::ChangedExpansionPack(expansion_pack) =>
-			{
-				self.filter.borrow_mut().set_expansion_pack(expansion_pack);
-				self.settings.send(Request::FilterChanged(self.filter.clone()));
-				true
-			},
-			Message::ChangedMapAttribute{repaint} =>
+			Message::ChangedFilter{repaint} =>
 			{
 				self.settings.send(Request::FilterChanged(self.filter.clone()));
 				repaint
