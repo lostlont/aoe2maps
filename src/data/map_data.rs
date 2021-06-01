@@ -12,7 +12,7 @@ use
 pub struct MapData
 {
 	name: &'static str,
-	image: &'static str,
+	image: String,
 	expansion_pack: ExpansionPack,
 	map_categories: HashSet<MapCategory>,
 	wood_amount: ResourceAmount,
@@ -25,7 +25,6 @@ impl MapData
 {
 	pub fn new(
 		name: &'static str,
-		image: &'static str,
 		expansion_pack: ExpansionPack,
 		map_categories: impl IntoIterator<Item = MapCategory>,
 		wood_amount: ResourceAmount,
@@ -36,7 +35,7 @@ impl MapData
 		Self
 		{
 			name,
-			image,
+			image: format!("maps/{}.png", name),
 			expansion_pack,
 			map_categories: HashSet::from_iter(map_categories),
 			wood_amount,
@@ -46,14 +45,14 @@ impl MapData
 		}
 	}
 
-	pub fn name(&self) -> &'static str
+	pub fn name(&self) -> &str
 	{
 		self.name
 	}
 
-	pub fn image(&self) -> &'static str
+	pub fn image(&self) -> &str
 	{
-		self.image
+		&self.image
 	}
 
 	pub fn expansion_pack(&self) -> ExpansionPack

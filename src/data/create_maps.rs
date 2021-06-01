@@ -10,7 +10,6 @@ pub fn create_maps() -> Vec<MapData>
 	[
 		MapData::new(
 			"Arabia",
-			"https://static.wikia.nocookie.net/ageofempires/images/4/44/Imgres-0.jpg",
 			ExpansionPack::TheAgeOfKings,
 			vec![
 				MapCategory::BlindRandom,
@@ -25,7 +24,6 @@ pub fn create_maps() -> Vec<MapData>
 		),
 		MapData::new(
 			"Archipelago",
-			"https://static.wikia.nocookie.net/ageofempires/images/0/04/Imgres-1424918802.jpg",
 			ExpansionPack::TheAgeOfKings,
 			vec![
 				MapCategory::BlindRandom,
@@ -39,7 +37,6 @@ pub fn create_maps() -> Vec<MapData>
 		),
 		MapData::new(
 			"Baltic",
-			"https://static.wikia.nocookie.net/ageofempires/images/c/ca/Unknown.jpeg",
 			ExpansionPack::TheAgeOfKings,
 			vec![
 				MapCategory::BlindRandom,
@@ -53,7 +50,6 @@ pub fn create_maps() -> Vec<MapData>
 		),
 		MapData::new(
 			"Black Forest",
-			"https://static.wikia.nocookie.net/ageofempires/images/c/ca/Th.jpeg",
 			ExpansionPack::TheAgeOfKings,
 			vec![
 				MapCategory::BlindRandom,
@@ -66,7 +62,6 @@ pub fn create_maps() -> Vec<MapData>
 		),
 		MapData::new(
 			"Coastal",
-			"https://static.wikia.nocookie.net/ageofempires/images/d/d1/Imgres-3.jpg",
 			ExpansionPack::TheAgeOfKings,
 			vec![
 				MapCategory::BlindRandom,
@@ -80,7 +75,6 @@ pub fn create_maps() -> Vec<MapData>
 		),
 		MapData::new(
 			"Continental",
-			"https://static.wikia.nocookie.net/ageofempires/images/8/8a/Continental.jpg",
 			ExpansionPack::TheAgeOfKings,
 			vec![
 				MapCategory::BlindRandom,
@@ -94,7 +88,6 @@ pub fn create_maps() -> Vec<MapData>
 		),
 		MapData::new(
 			"Fortress",
-			"https://static.wikia.nocookie.net/ageofempires/images/b/bc/Fortress_two-player_match.jpg",
 			ExpansionPack::TheAgeOfKings,
 			vec![
 				MapCategory::LandMap,
@@ -106,7 +99,6 @@ pub fn create_maps() -> Vec<MapData>
 		),
 		MapData::new(
 			"Gold Rush",
-			"https://static.wikia.nocookie.net/ageofempires/images/5/53/Gold_Rush.jpg",
 			ExpansionPack::TheAgeOfKings,
 			vec![
 				MapCategory::BlindRandom,
@@ -119,7 +111,6 @@ pub fn create_maps() -> Vec<MapData>
 		),
 		MapData::new(
 			"Highland",
-			"https://static.wikia.nocookie.net/ageofempires/images/9/96/Highland_AoEII.png",
 			ExpansionPack::TheAgeOfKings,
 			vec![
 				MapCategory::BlindRandom,
@@ -134,7 +125,6 @@ pub fn create_maps() -> Vec<MapData>
 		),
 		MapData::new(
 			"Islands",
-			"https://static.wikia.nocookie.net/ageofempires/images/2/2f/AoEII_Islands.png",
 			ExpansionPack::TheAgeOfKings,
 			vec![
 				MapCategory::BlindRandom,
@@ -148,7 +138,6 @@ pub fn create_maps() -> Vec<MapData>
 		),
 		MapData::new(
 			"Mediterranean",
-			"https://static.wikia.nocookie.net/ageofempires/images/a/ab/AoEII_Mediterranean2.png",
 			ExpansionPack::TheAgeOfKings,
 			vec![
 				MapCategory::BlindRandom,
@@ -162,7 +151,6 @@ pub fn create_maps() -> Vec<MapData>
 		),
 		MapData::new(
 			"Migration",
-			"https://static.wikia.nocookie.net/ageofempires/images/4/4d/Migration.jpg",
 			ExpansionPack::TheAgeOfKings,
 			vec![
 				MapCategory::BlindRandom,
@@ -176,7 +164,6 @@ pub fn create_maps() -> Vec<MapData>
 		),
 		MapData::new(
 			"Rivers",
-			"https://static.wikia.nocookie.net/ageofempires/images/a/aa/Rivers_minimap.jpg",
 			ExpansionPack::TheAgeOfKings,
 			vec![
 				MapCategory::BlindRandom,
@@ -190,7 +177,6 @@ pub fn create_maps() -> Vec<MapData>
 		),
 		MapData::new(
 			"Team Islands",
-			"https://static.wikia.nocookie.net/ageofempires/images/e/ed/Team_Islands.jpg",
 			ExpansionPack::TheAgeOfKings,
 			vec![
 				MapCategory::BlindRandom,
