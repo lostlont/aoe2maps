@@ -18,19 +18,27 @@ pub enum MapCategory
 	LandMap,
 	MixedMap,
 	WaterMap,
+	NomadMap,
+	MigrationMap,
+	OpenMap,
+	ClosedMap,
 }
 
 impl EnumValues for MapCategory
 {
 	fn values() -> Iter<'static, Self>
 	{
-		static VALUES: [MapCategory; 6] = [
+		static VALUES: [MapCategory; 10] = [
 			MapCategory::BlindRandom,
 			MapCategory::RandomLandMap,
 			MapCategory::FullRandom,
 			MapCategory::LandMap,
 			MapCategory::MixedMap,
 			MapCategory::WaterMap,
+			MapCategory::NomadMap,
+			MapCategory::MigrationMap,
+			MapCategory::OpenMap,
+			MapCategory::ClosedMap,
 		];
 		VALUES.iter()
 	}
@@ -48,6 +56,10 @@ impl Display for MapCategory
 			MapCategory::LandMap => "Land Map (DE)",
 			MapCategory::MixedMap => "Mixed Map (DE)",
 			MapCategory::WaterMap => "Water Map (DE)",
+			MapCategory::NomadMap => "Nomad Map (DE)",
+			MapCategory::MigrationMap => "Migration Map (DE)",
+			MapCategory::OpenMap => "Open Map (DE)",
+			MapCategory::ClosedMap => "Closed Map (DE)",
 		};
 
 		write!(formatter, "{}", description)
