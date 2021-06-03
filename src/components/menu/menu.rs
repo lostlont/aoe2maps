@@ -99,6 +99,7 @@ impl Menu
 		filter: &Rc<RefCell<Filter>>,
 		link: &ComponentLink<Self>,
 		title: &str,
+		is_opened: bool,
 		get_value: impl Fn(&Filter, T) -> bool + 'static,
 		set_value: impl Fn(&mut Filter, T) + 'static)
 		-> EnumSetFilter<T>
@@ -107,6 +108,7 @@ impl Menu
 	{
 		EnumSetFilter::new(
 			title.to_string(),
+			is_opened,
 			Rc::new(closure!(clone filter, |a| get_value(&filter.borrow(), a))),
 			Rc::new(closure!(clone filter, clone link, |a|
 				{
@@ -147,11 +149,11 @@ impl Component for Menu
 			settings: Settings::dispatcher(),
 			filter_method_filter: Self::create_enum_filter(&filter, &link, "Szűrés módja", Filter::get_filter_method, Filter::set_filter_method),
 			expansion_pack_filter: Self::create_enum_filter(&filter, &link, "Kiegészítő", Filter::get_expansion_pack, Filter::set_expansion_pack),
-			map_categories_filter: Self::create_enum_set_filter(&filter, &link, "Kategóriák", Filter::is_allowed_map_category, Filter::toggle_allowed_map_category),
-			wood_amount_filter: Self::create_enum_set_filter(&filter, &link, "Fa mennyisége", Filter::is_allowed_wood_amount, Filter::toggle_allowed_wood_amount),
-			food_amount_filter: Self::create_enum_set_filter(&filter, &link, "Táplálék mennyisége", Filter::is_allowed_food_amount, Filter::toggle_allowed_food_amount),
-			gold_amount_filter: Self::create_enum_set_filter(&filter, &link, "Arany mennyisége", Filter::is_allowed_gold_amount, Filter::toggle_allowed_gold_amount),
-			stone_amount_filter: Self::create_enum_set_filter(&filter, &link, "Kő mennyisége", Filter::is_allowed_stone_amount, Filter::toggle_allowed_stone_amount),
+			map_categories_filter: Self::create_enum_set_filter(&filter, &link, "Kategóriák", true, Filter::is_allowed_map_category, Filter::toggle_allowed_map_category),
+			wood_amount_filter: Self::create_enum_set_filter(&filter, &link, "Fa mennyisége", false, Filter::is_allowed_wood_amount, Filter::toggle_allowed_wood_amount),
+			food_amount_filter: Self::create_enum_set_filter(&filter, &link, "Táplálék mennyisége", false, Filter::is_allowed_food_amount, Filter::toggle_allowed_food_amount),
+			gold_amount_filter: Self::create_enum_set_filter(&filter, &link, "Arany mennyisége", false, Filter::is_allowed_gold_amount, Filter::toggle_allowed_gold_amount),
+			stone_amount_filter: Self::create_enum_set_filter(&filter, &link, "Kő mennyisége", false, Filter::is_allowed_stone_amount, Filter::toggle_allowed_stone_amount),
 			state,
 			filter,
 		}

@@ -8,7 +8,11 @@ use
 pub struct AccordionProperties
 {
 	pub children: Children,
+
 	pub title: String,
+
+	#[prop_or(true)]
+	pub is_opened: bool,
 }
 
 pub struct Accordion
@@ -16,7 +20,7 @@ pub struct Accordion
 	properties: AccordionProperties,
 	link: ComponentLink<Self>,
 	node_ref: NodeRef,
-	opened: bool,
+	is_opened: bool,
 }
 
 pub enum Message
@@ -28,7 +32,7 @@ impl Accordion
 {
 	fn button_icon(&self) -> &str
 	{
-		if self.opened
+		if self.is_opened
 		{
 			"⯆"
 		}
@@ -40,7 +44,7 @@ impl Accordion
 
 	fn content_class(&self) -> &str
 	{
-		if self.opened
+		if self.is_opened
 		{
 			"opened"
 		}
@@ -54,7 +58,7 @@ impl Accordion
 	{
 		if let Some(element) = self.node_ref.cast::<HtmlElement>()
 		{
-			let max_height = if self.opened
+			let max_height = if self.is_opened
 			{
 				 element.scroll_height()
 			}
@@ -75,12 +79,14 @@ impl Component for Accordion
 
 	fn create(properties: Self::Properties, link: ComponentLink<Self>) -> Self
 	{
+		let is_opened = properties.is_opened;
+
 		Self
 		{
 			properties,
 			link,
 			node_ref: NodeRef::default(),
-			opened: true,
+			is_opened,
 		}
 	}
 
@@ -90,7 +96,7 @@ impl Component for Accordion
 		{
 			Message::Toggle =>
 			{
-				self.opened = !self.opened;
+				self.is_opened = !self.is_opened;
 				self.update_content_style();
 			}
 		}

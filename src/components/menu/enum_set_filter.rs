@@ -20,6 +20,7 @@ where
 	TEnum: Clone,
 {
 	title: String,
+	is_opened: bool,
 	checkboxes: Vec<(TEnum, FilterCheckbox)>,
 }
 
@@ -27,7 +28,7 @@ impl<TEnum> EnumSetFilter<TEnum>
 where
 	TEnum: Clone + Copy + Display + EnumValues + Eq + Hash + 'static,
 {
-	pub fn new(title: String, contains_value: Rc<dyn Fn(TEnum) -> bool>, toggle_value_contained: Rc<dyn Fn(TEnum)>) -> Self
+	pub fn new(title: String, is_opened: bool, contains_value: Rc<dyn Fn(TEnum) -> bool>, toggle_value_contained: Rc<dyn Fn(TEnum)>) -> Self
 	{
 		let values = TEnum
 			::values()
@@ -42,6 +43,7 @@ where
 		Self
 		{
 			title,
+			is_opened,
 			checkboxes,
 		}
 	}
@@ -58,7 +60,10 @@ where
 	{
 		html!
 		{
-			<Accordion title=&self.title>
+			<Accordion
+				title=&self.title
+				is_opened=self.is_opened
+			>
 			{
 				for self.checkboxes
 					.iter()
