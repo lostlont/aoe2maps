@@ -3,15 +3,17 @@ use
 	std::
 	{
 		cell::RefCell,
-		fmt::Display,
-		hash::Hash,
 		rc::Rc,
 	},
-	closure::closure,
 	yew::
 	{
 		prelude::*,
 		agent::Dispatcher,
+	},
+	super::
+	{
+		enum_filter_builder::EnumFilterBuilder,
+		enum_set_filter_builder::EnumSetFilterBuilder,
 	},
 	crate::
 	{
@@ -22,18 +24,17 @@ use
 		},
 		components::
 		{
-			menu::
-			{
-				enum_filter::EnumFilter,
-				enum_set_filter::EnumSetFilter,
-			},
 			utils::hamburger::Hamburger,
 		},
 		data::
 		{
-			enum_values::EnumValues,
 			filter_method::FilterMethod,
 			map_attribute::{ ExpansionPack, MapCategory, ResourceAmount },
+		},
+		views::
+		{
+			enum_filter::EnumFilter,
+			enum_set_filter::EnumSetFilter,
 		},
 	},
 };
@@ -74,48 +75,6 @@ impl Menu
 
 		classes.join(" ")
 	}
-
-	fn create_enum_filter<T>(
-		filter: &Rc<RefCell<Filter>>,
-		link: &ComponentLink<Self>,
-		title: &str,
-		get_value: impl Fn(&Filter) -> T + 'static,
-		set_value: impl Fn(&mut Filter, T) + 'static)
-		-> EnumFilter<T>
-	where
-		T: Copy + Display + EnumValues + Eq + Hash + 'static,
-	{
-		EnumFilter::new(
-			title.to_string(),
-			Rc::new(closure!(clone filter, || get_value(&filter.borrow()))),
-			Rc::new(closure!(clone filter, clone link, |v|
-				{
-					set_value(&mut *filter.borrow_mut(), v);
-					link.send_message(Message::ChangedFilter{ repaint: true });
-				})))
-	}
-
-	fn create_enum_set_filter<T>(
-		filter: &Rc<RefCell<Filter>>,
-		link: &ComponentLink<Self>,
-		title: &str,
-		is_opened: bool,
-		get_value: impl Fn(&Filter, T) -> bool + 'static,
-		set_value: impl Fn(&mut Filter, T) + 'static)
-		-> EnumSetFilter<T>
-	where
-		T: Copy + Display + EnumValues + Eq + Hash + 'static,
-	{
-		EnumSetFilter::new(
-			title.to_string(),
-			is_opened,
-			Rc::new(closure!(clone filter, |a| get_value(&filter.borrow(), a))),
-			Rc::new(closure!(clone filter, clone link, |a|
-				{
-					set_value(&mut *filter.borrow_mut(), a);
-					link.send_message(Message::ChangedFilter{ repaint: false });
-				})))
-	}
 }
 
 pub enum Message
@@ -143,17 +102,38 @@ impl Component for Menu
 		};
 
 		let filter = Rc::new(RefCell::new(Filter::new()));
+		let mut enum_filter_builder = EnumFilterBuilder::new(&filter, &link);
+		let mut enum_set_filter_builder = EnumSetFilterBuilder::new(&filter, &link);
 		Self
 		{
 			link: link.clone(),
 			settings: Settings::dispatcher(),
-			filter_method_filter: Self::create_enum_filter(&filter, &link, "Szűrés módja", Filter::get_filter_method, Filter::set_filter_method),
-			expansion_pack_filter: Self::create_enum_filter(&filter, &link, "Kiegészítő", Filter::get_expansion_pack, Filter::set_expansion_pack),
-			map_categories_filter: Self::create_enum_set_filter(&filter, &link, "Kategóriák", true, Filter::is_allowed_map_category, Filter::toggle_allowed_map_category),
-			wood_amount_filter: Self::create_enum_set_filter(&filter, &link, "Fa mennyisége", false, Filter::is_allowed_wood_amount, Filter::toggle_allowed_wood_amount),
-			food_amount_filter: Self::create_enum_set_filter(&filter, &link, "Táplálék mennyisége", false, Filter::is_allowed_food_amount, Filter::toggle_allowed_food_amount),
-			gold_amount_filter: Self::create_enum_set_filter(&filter, &link, "Arany mennyisége", false, Filter::is_allowed_gold_amount, Filter::toggle_allowed_gold_amount),
-			stone_amount_filter: Self::create_enum_set_filter(&filter, &link, "Kő mennyisége", false, Filter::is_allowed_stone_amount, Filter::toggle_allowed_stone_amount),
+			filter_method_filter: enum_filter_builder
+				.with_title("Szűrés módja")
+				.build(Filter::get_filter_method, Filter::set_filter_method),
+			expansion_pack_filter: enum_filter_builder
+				.with_title("Kiegészítő")
+				.build(Filter::get_expansion_pack, Filter::set_expansion_pack),
+			map_categories_filter: enum_set_filter_builder
+				.with_title("Kategóriák")
+				.set_opened(true)
+				.build(Filter::is_allowed_map_category, Filter::toggle_allowed_map_category),
+			wood_amount_filter: enum_set_filter_builder
+				.with_title("Fa mennyisége")
+				.set_opened(false)
+				.build(Filter::is_allowed_wood_amount, Filter::toggle_allowed_wood_amount),
+			food_amount_filter: enum_set_filter_builder
+				.with_title("Táplálék mennyisége")
+				.set_opened(false)
+				.build(Filter::is_allowed_food_amount, Filter::toggle_allowed_food_amount),
+			gold_amount_filter: enum_set_filter_builder
+				.with_title("Arany mennyisége")
+				.set_opened(false)
+				.build(Filter::is_allowed_gold_amount, Filter::toggle_allowed_gold_amount),
+			stone_amount_filter: enum_set_filter_builder
+				.with_title("Kő mennyisége")
+				.set_opened(false)
+				.build(Filter::is_allowed_stone_amount, Filter::toggle_allowed_stone_amount),
 			state,
 			filter,
 		}
