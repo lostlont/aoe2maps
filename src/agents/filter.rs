@@ -8,12 +8,14 @@ use
 		map_attribute::{ ExpansionPack, MapCategory, ResourceAmount },
 		map_attribute_set::MapAttributeSet,
 		map_data::MapData,
+		order_method::OrderMethod,
 	},
 };
 
 pub struct Filter
 {
 	filter_method: FilterMethod,
+	order_method: OrderMethod,
 	expansion_pack: ExpansionPack,
 	allowed_map_categories: MapAttributeSet<MapCategory>,
 	allowed_wood_amount: MapAttributeSet<ResourceAmount>,
@@ -28,7 +30,8 @@ impl Filter
 	{
 		Self
 		{
-			filter_method: FilterMethod::Mixed,
+			filter_method: FilterMethod::default(),
+			order_method: OrderMethod::default(),
 			expansion_pack: *ExpansionPack::values().last().unwrap(),
 			allowed_map_categories: MapAttributeSet::new(),
 			allowed_wood_amount: MapAttributeSet::new(),
@@ -41,6 +44,11 @@ impl Filter
 	pub fn set_filter_method(&mut self, filter_method: FilterMethod)
 	{
 		self.filter_method = filter_method;
+	}
+
+	pub fn set_order_method(&mut self, order_method: OrderMethod)
+	{
+		self.order_method = order_method;
 	}
 
 	pub fn set_expansion_pack(&mut self, expansion_pack: ExpansionPack)
@@ -102,6 +110,7 @@ impl Filter
 pub trait FilterView
 {
 	fn get_filter_method(&self) -> FilterMethod;
+	fn get_order_method(&self) -> OrderMethod;
 	fn get_expansion_pack(&self) -> ExpansionPack;
 	fn is_allowed(&self, map_data: &MapData) -> bool;
 	fn is_allowed_by_expansion_pack(&self, map_data: &MapData) -> bool;
@@ -113,6 +122,11 @@ impl FilterView for Filter
 	fn get_filter_method(&self) -> FilterMethod
 	{
 		self.filter_method
+	}
+
+	fn get_order_method(&self) -> OrderMethod
+	{
+		self.order_method
 	}
 
 	fn get_expansion_pack(&self) -> ExpansionPack

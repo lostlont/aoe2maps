@@ -35,7 +35,7 @@ impl Component for Page
 
 	fn update(&mut self, _: Self::Message) -> ShouldRender
 	{
-		true
+		false
 	}
 
 	fn change(&mut self, _: Self::Properties) -> ShouldRender

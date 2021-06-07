@@ -30,6 +30,7 @@ use
 		{
 			filter_method::FilterMethod,
 			map_attribute::{ ExpansionPack, MapCategory, ResourceAmount },
+			order_method::OrderMethod,
 		},
 		views::
 		{
@@ -51,6 +52,7 @@ pub struct Menu
 	link: ComponentLink<Self>,
 	settings: Dispatcher<Settings>,
 	filter_method_filter: EnumFilter<FilterMethod>,
+	order_method_filter: EnumFilter<OrderMethod>,
 	expansion_pack_filter: EnumFilter<ExpansionPack>,
 	map_categories_filter: EnumSetFilter<MapCategory>,
 	wood_amount_filter: EnumSetFilter<ResourceAmount>,
@@ -111,6 +113,9 @@ impl Component for Menu
 			filter_method_filter: enum_filter_builder
 				.with_title("Szűrés módja")
 				.build(Filter::get_filter_method, Filter::set_filter_method),
+			order_method_filter: enum_filter_builder
+				.with_title("Rendezés módja")
+				.build(Filter::get_order_method, Filter::set_order_method),
 			expansion_pack_filter: enum_filter_builder
 				.with_title("Kiegészítő")
 				.build(Filter::get_expansion_pack, Filter::set_expansion_pack),
@@ -181,6 +186,7 @@ impl Component for Menu
 				<Hamburger clicked=self.link.callback(|_| Message::ToggleState) />
 				<div class="content">
 				{ self.filter_method_filter.render() }
+				{ self.order_method_filter.render() }
 				{ self.expansion_pack_filter.render() }
 				{ self.map_categories_filter.render() }
 				{ self.wood_amount_filter.render() }

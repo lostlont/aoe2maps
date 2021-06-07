@@ -9,35 +9,33 @@ use
 };
 
 #[derive(Clone, Copy, Eq, Hash, PartialEq)]
-pub enum FilterMethod
+pub enum OrderMethod
 {
-	Hide,
-	Disable,
-	Mixed,
+	Name,
+	ExpansionPack,
 }
 
-impl FilterMethod
+impl OrderMethod
 {
 	fn name(&self) -> &str
 	{
 		match self
 		{
-			FilterMethod::Hide => "Elrejtés",
-			FilterMethod::Disable => "Szürkítés",
-			FilterMethod::Mixed => "Vegyes",
+			OrderMethod::Name => "Név",
+			OrderMethod::ExpansionPack => "Kiegészítő",
 		}
 	}
 }
 
-impl Default for FilterMethod
+impl Default for OrderMethod
 {
 	fn default() -> Self
 	{
-		FilterMethod::Mixed
+		OrderMethod::Name
 	}
 }
 
-impl Display for FilterMethod
+impl Display for OrderMethod
 {
 	fn fmt(&self, formatter: &mut Formatter<'_>) -> Result<(), Error>
 	{
@@ -45,15 +43,14 @@ impl Display for FilterMethod
 	}
 }
 
-impl EnumValues for FilterMethod
+impl EnumValues for OrderMethod
 {
 	fn values() -> Iter<'static, Self>
 	{
-		static VALUES: [FilterMethod; 3] =
+		static VALUES: [OrderMethod; 2] =
 		[
-			FilterMethod::Hide,
-			FilterMethod::Disable,
-			FilterMethod::Mixed,
+			OrderMethod::Name,
+			OrderMethod::ExpansionPack,
 		];
 		VALUES.iter()
 	}

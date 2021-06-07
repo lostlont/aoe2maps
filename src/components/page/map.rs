@@ -131,7 +131,7 @@ impl Component for Map
 		}
 	}
 
-	fn update(&mut self, message: Self::Message) -> bool
+	fn update(&mut self, message: Self::Message) -> ShouldRender
 	{
 		match message
 		{
@@ -142,9 +142,10 @@ impl Component for Map
 		true
 	}
 
-	fn change(&mut self, _: Self::Properties) -> bool
+	fn change(&mut self, properties: Self::Properties) -> ShouldRender
 	{
-		false
+		self.properties = properties;
+		true
 	}
 
 	fn view(&self) -> Html

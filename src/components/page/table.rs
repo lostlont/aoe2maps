@@ -1,10 +1,25 @@
 use
 {
+	std::
+	{
+		cell::RefCell,
+		rc::Rc,
+	},
 	yew::prelude::*,
 	crate::
 	{
-		agents::settings::{ MenuState, Response, Settings },
-		data::map_data::MapData,
+		agents::
+		{
+			filter::FilterView,
+			settings::{ MenuState, Request, Response, Settings },
+		},
+		data::
+		{
+			enum_values::EnumValues,
+			map_attribute::ExpansionPack,
+			map_data::MapData,
+			order_method::OrderMethod,
+		},
 	},
 	super::map::Map,
 };
@@ -18,12 +33,40 @@ pub struct TableProperties
 pub struct Table
 {
 	properties: TableProperties,
-	_settings: Box<dyn Bridge<Settings>>,
+	settings: Box<dyn Bridge<Settings>>,
 	menu_state: MenuState,
+	order_method: OrderMethod,
 }
 
 impl Table
 {
+	fn render_maps(&self) -> Box<dyn Iterator<Item = Html> + '_>
+	{
+		match self.order_method
+		{
+			OrderMethod::Name =>
+			{
+				let result = self.properties.maps
+					.iter()
+					.map(Self::render_map);
+
+				Box::new(result)
+			},
+			OrderMethod::ExpansionPack =>
+			{
+				let result = ExpansionPack
+					::values()
+					.copied()
+					.flat_map(move |e| self.properties.maps
+						.iter()
+						.filter(move |m| m.expansion_pack() == e)
+						.map(Self::render_map));
+
+				Box::new(result)
+			},
+		}
+	}
+
 	fn render_map(map_data: &MapData) -> Html
 	{
 		html!
@@ -48,8 +91,8 @@ impl Table
 
 pub enum Message
 {
-	None,
 	SetMenuState(MenuState),
+	SetOrderMethod(Rc<RefCell<dyn FilterView>>),
 }
 
 impl Component for Table
@@ -62,14 +105,15 @@ impl Component for Table
 		let callback = |response| match response
 		{
 			Response::MenuStateChanged(menu_state) => Message::SetMenuState(menu_state),
-			_ => Message::None,
+			Response::FilterChanged(filter) => Message::SetOrderMethod(filter),
 		};
 
 		Self
 		{
 			properties,
-			_settings: Settings::bridge(link.callback(callback)),
+			settings: Settings::bridge(link.callback(callback)),
 			menu_state: MenuState::Open,
+			order_method: OrderMethod::default(),
 		}
 	}
 
@@ -77,11 +121,24 @@ impl Component for Table
 	{
 		match message
 		{
-			Message::None => {},
-			Message::SetMenuState(menu_state) => self.menu_state = menu_state,
-		};
+			Message::SetMenuState(menu_state) =>
+			{
+				self.menu_state = menu_state;
+				true
+			},
+			Message::SetOrderMethod(filter) =>
+			{
+				let order_method = filter.borrow().get_order_method();
+				let is_changed = order_method != self.order_method;
+				if is_changed
+				{
+					self.order_method = order_method;
+					self.settings.send(Request::FilterChanged(filter));
+				}
 
-		true
+				is_changed
+			},
+		}
 	}
 
 	fn change(&mut self, _: Self::Properties) -> ShouldRender
@@ -100,7 +157,7 @@ impl Component for Table
 					<div class="header"><h2>{ "Kiegészítő" }</h2></div>
 					<div class="header"><h2>{ "Jellemzők" }</h2></div>
 				</div>
-				{ for self.properties.maps.iter().map(Self::render_map) }
+				{ for self.render_maps() }
 			</div>
 		}
 	}
