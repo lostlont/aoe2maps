@@ -25,7 +25,7 @@ use
 	},
 };
 
-#[derive(Clone, PartialEq)]
+#[derive(Clone, Copy, PartialEq)]
 pub enum State
 {
 	Default,
@@ -47,6 +47,7 @@ pub struct Map
 {
 	properties: MapProperties,
 	_settings: Box<dyn Bridge<Settings>>,
+	state: State,
 }
 
 impl Map
@@ -55,7 +56,7 @@ impl Map
 	{
 		let mut classes = vec!["row"];
 
-		match self.properties.state
+		match self.state
 		{
 			State::Hidden => classes.push("hidden"),
 			State::Disabled => classes.push("disabled"),
@@ -82,13 +83,13 @@ impl Map
 	{
 		let filter = filter.borrow();
 		let is_allowed = filter.is_allowed(&self.properties.map_data);
-		if is_allowed && (self.properties.state != State::Default)
+		if is_allowed && (self.state != State::Default)
 		{
-			self.properties.state = State::Visible;
+			self.state = State::Visible;
 		}
 		else if !is_allowed
 		{
-			self.properties.state = match filter.get_filter_method()
+			self.state = match filter.get_filter_method()
 			{
 				FilterMethod::Hide => State::Hidden,
 				FilterMethod::Disable => State::Disabled,
@@ -124,10 +125,12 @@ impl Component for Map
 			_ => Message::None,
 		};
 
+		let state = properties.state;
 		Self
 		{
 			properties,
 			_settings: Settings::bridge(link.callback(callback)),
+			state,
 		}
 	}
 
