@@ -11,6 +11,7 @@ use
 		Loader,
 		static_loader
 	},
+	i18n_embed::WebLanguageRequester,
 	lazy_static::lazy_static,
 	unic_langid::langid,
 	crate::data::language::Language,
@@ -30,7 +31,7 @@ static HU_HU: LanguageIdentifier = langid!("hu-HU");
 
 lazy_static!
 {
-	static ref LANGUAGE: Mutex<&'static LanguageIdentifier> = Mutex::new(&EN_US);
+	static ref LANGUAGE: Mutex<LanguageIdentifier> = Mutex::new(detect_language());
 }
 
 // TODO Split?
@@ -106,12 +107,24 @@ impl Default for Text
 	}
 }
 
+fn detect_language() -> LanguageIdentifier
+{
+	let supported_languages = vec![ &EN_US, &HU_HU ];
+	let requested_languages = WebLanguageRequester::requested_languages();
+	requested_languages
+		.iter()
+		.filter(|l| supported_languages.contains(l))
+		.cloned()
+		.next()
+		.unwrap_or_else(|| EN_US.clone())
+}
+
 pub fn set_language(language: Language)
 {
 	*LANGUAGE.lock().unwrap() = match language
 	{
-		Language::EnUs => &EN_US,
-		Language::HuHu => &HU_HU,
+		Language::EnUs => EN_US.clone(),
+		Language::HuHu => HU_HU.clone(),
 	};
 }
 
