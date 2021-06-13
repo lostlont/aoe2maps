@@ -128,6 +128,23 @@ pub fn set_language(language: Language)
 	};
 }
 
+pub fn get_language() -> Language
+{
+	let language = &*LANGUAGE.lock().unwrap();
+	if language == &EN_US
+	{
+		Language::EnUs
+	}
+	else if language == &HU_HU
+	{
+		Language::HuHu
+	}
+	else
+	{
+		Language::EnUs
+	}
+}
+
 pub fn localize(id: &str) -> String
 {
 	LOCALES.lookup(&*LANGUAGE.lock().unwrap(), id)

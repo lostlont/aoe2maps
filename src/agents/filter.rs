@@ -3,7 +3,7 @@ use
 {
 	crate::
 	{
-		agents::localization::set_language,
+		agents::localization::{ get_language, set_language },
 		data::
 		{
 			enum_values::EnumValues,
@@ -44,7 +44,7 @@ impl Filter
 			allowed_food_amount: MapAttributeSet::new(),
 			allowed_gold_amount: MapAttributeSet::new(),
 			allowed_stone_amount: MapAttributeSet::new(),
-			language: Language::default(),
+			language: get_language(),
 		}
 	}
 
