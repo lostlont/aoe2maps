@@ -6,6 +6,7 @@ use
 		result::Result,
 		slice::Iter,
 	},
+	crate::agents::localization::Text,
 	super::{ EnumValues, MapAttribute },
 };
 
@@ -57,6 +58,14 @@ impl Display for ExpansionPack
 	fn fmt(&self, formatter: &mut Formatter<'_>) -> Result<(), Error>
 	{
 		write!(formatter, "{}", self.name())
+	}
+}
+
+impl Into<Text> for ExpansionPack
+{
+	fn into(self) -> Text
+	{
+		Text::new_value(self.to_string())
 	}
 }
 

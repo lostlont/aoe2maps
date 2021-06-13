@@ -1,22 +1,23 @@
 use
 {
 	yew::prelude::*,
+	crate::agents::localization::Text,
 };
 
 pub struct FilterCheckbox
 {
-	name: String,
+	name: Text,
 	is_checked: Box<dyn Fn() -> bool>,
 	toggle: Callback<MouseEvent>,
 }
 
 impl FilterCheckbox
 {
-	pub fn new(name: &str, is_checked: Box<dyn Fn() -> bool>, toggle: Box<dyn Fn()>) -> Self
+	pub fn new(name: Text, is_checked: Box<dyn Fn() -> bool>, toggle: Box<dyn Fn()>) -> Self
 	{
 		Self
 		{
-			name: name.to_string(),
+			name,
 			is_checked,
 			toggle: Callback::from(move |_| (*toggle)()),
 		}
@@ -35,7 +36,7 @@ impl Renderable for FilterCheckbox
 					checked=(*self.is_checked)()
 					onclick=self.toggle.clone()
 				/>
-				{ &self.name }
+				{ self.name.localize() }
 			</label>
 		}
 	}

@@ -4,8 +4,9 @@ use
 	{
 		fmt::{ Display, Error, Formatter },
 		result::Result,
+		slice::Iter,
 	},
-	core::slice::Iter,
+	crate::agents::localization::Text,
 	super::{ EnumValues, MapAttribute },
 };
 
@@ -23,9 +24,9 @@ impl ResourceAmount
 	{
 		match self
 		{
-			ResourceAmount::Scarce => "Kevés",
-			ResourceAmount::Average => "Átlagos",
-			ResourceAmount::Plentiful => "Bőséges",
+			ResourceAmount::Scarce => "resource-amount-scarce",
+			ResourceAmount::Average => "resource-amount-average",
+			ResourceAmount::Plentiful => "resource-amount-plentiful",
 		}
 	}
 }
@@ -48,6 +49,14 @@ impl Display for ResourceAmount
 	fn fmt(&self, formatter: &mut Formatter<'_>) -> Result<(), Error>
 	{
 		write!(formatter, "{}", self.name())
+	}
+}
+
+impl Into<Text> for ResourceAmount
+{
+	fn into(self) -> Text
+	{
+		Text::new_id(self.to_string())
 	}
 }
 

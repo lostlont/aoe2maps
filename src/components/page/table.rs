@@ -11,6 +11,7 @@ use
 		agents::
 		{
 			filter::FilterView,
+			localization::localize,
 			settings::{ MenuState, Request, Response, Settings },
 		},
 		data::
@@ -24,7 +25,7 @@ use
 	super::map::Map,
 };
 
-#[derive(Properties, Clone)]
+#[derive(Clone, Properties)]
 pub struct TableProperties
 {
 	pub maps: Vec<MapData>,
@@ -141,9 +142,10 @@ impl Component for Table
 		}
 	}
 
-	fn change(&mut self, _: Self::Properties) -> ShouldRender
+	fn change(&mut self, properties: Self::Properties) -> ShouldRender
 	{
-		false
+		self.properties = properties;
+		true
 	}
 
 	fn view(&self) -> Html
@@ -152,10 +154,10 @@ impl Component for Table
 		{
 			<div class=self.class()>
 				<div class="row">
-					<div class="header"><h2>{ "Név" }</h2></div>
-					<div class="header"><h2>{ "Kép" }</h2></div>
-					<div class="header"><h2>{ "Kiegészítő" }</h2></div>
-					<div class="header"><h2>{ "Jellemzők" }</h2></div>
+					<div class="header"><h2>{ localize("attribute-name") }</h2></div>
+					<div class="header"><h2>{ localize("attribute-image") }</h2></div>
+					<div class="header"><h2>{ localize("attribute-expansion-pack") }</h2></div>
+					<div class="header"><h2>{ localize("attribute-features") }</h2></div>
 				</div>
 				{ for self.render_maps() }
 			</div>

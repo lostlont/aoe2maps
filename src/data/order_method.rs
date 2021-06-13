@@ -5,6 +5,7 @@ use
 		fmt::{ Error, Formatter, Display },
 		slice::Iter,
 	},
+	crate::agents::localization::Text,
 	super::enum_values::EnumValues,
 };
 
@@ -21,8 +22,8 @@ impl OrderMethod
 	{
 		match self
 		{
-			OrderMethod::Name => "Név",
-			OrderMethod::ExpansionPack => "Kiegészítő",
+			OrderMethod::Name => "order-method-name",
+			OrderMethod::ExpansionPack => "order-method-expansion-pack",
 		}
 	}
 }
@@ -53,5 +54,13 @@ impl EnumValues for OrderMethod
 			OrderMethod::ExpansionPack,
 		];
 		VALUES.iter()
+	}
+}
+
+impl Into<Text> for OrderMethod
+{
+	fn into(self) -> Text
+	{
+		Text::new_id(self.to_string())
 	}
 }

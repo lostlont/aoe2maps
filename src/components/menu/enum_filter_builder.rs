@@ -12,7 +12,11 @@ use
 	super::Message,
 	crate::
 	{
-		agents::filter::Filter,
+		agents::
+		{
+			filter::Filter,
+			localization::Text,
+		},
 		components::menu::Menu,
 		data::enum_values::EnumValues,
 		views::enum_filter::EnumFilter,
@@ -23,7 +27,7 @@ pub struct EnumFilterBuilder
 {
 	filter: Rc<RefCell<Filter>>,
 	link: ComponentLink<Menu>,
-	title: String,
+	title: Text,
 }
 
 impl EnumFilterBuilder
@@ -34,13 +38,13 @@ impl EnumFilterBuilder
 		{
 			filter: filter.clone(),
 			link: link.clone(),
-			title: String::default(),
+			title: Text::default(),
 		}
 	}
 
-	pub fn with_title(&mut self, title: impl AsRef<str>) -> &mut Self
+	pub fn with_title(&mut self, title: Text) -> &mut Self
 	{
-		self.title = title.as_ref().to_string();
+		self.title = title;
 		self
 	}
 
@@ -50,7 +54,7 @@ impl EnumFilterBuilder
 		set_value: impl Fn(&mut Filter, T) + 'static)
 		-> EnumFilter<T>
 	where
-		T: Copy + Display + EnumValues + Eq + Hash + 'static,
+		T: Copy + Display + EnumValues + Eq + Hash + Into<Text> + 'static,
 	{
 		EnumFilter::new(
 			self.title.clone(),

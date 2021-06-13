@@ -5,6 +5,7 @@ use
 		cell::RefCell,
 		rc::Rc,
 	},
+	maplit::hashmap,
 	yew::
 	{
 		prelude::*,
@@ -15,11 +16,13 @@ use
 		agents::
 		{
 			filter::FilterView,
+			localization::Text,
 			settings::{ Response, Settings },
 		},
 		data::
 		{
 			filter_method::FilterMethod,
+			map_attribute::ResourceAmount,
 			map_data::MapData,
 		},
 	},
@@ -68,13 +71,23 @@ impl Map
 
 	fn render_features(&self) -> Html
 	{
+		fn localize_feature(resource: Text, amount: ResourceAmount) -> String
+		{
+			let text = Text::new_id_args("feature", hashmap!
+			{
+				"key" => resource,
+				"value" => amount.into(),
+			});
+			text.localize()
+		}
+
 		html!
 		{
 			<ul>
-				<li>{ "Fa: " }{ self.properties.map_data.wood_amount() }</li>
-				<li>{ "Táplálék: " }{ self.properties.map_data.food_amount() }</li>
-				<li>{ "Arany: " }{ self.properties.map_data.gold_amount() }</li>
-				<li>{ "Kő: " }{ self.properties.map_data.stone_amount() }</li>
+				<li>{ localize_feature(Text::new_id("resource-wood"), self.properties.map_data.wood_amount()) }</li>
+				<li>{ localize_feature(Text::new_id("resource-food"), self.properties.map_data.food_amount()) }</li>
+				<li>{ localize_feature(Text::new_id("resource-gold"), self.properties.map_data.gold_amount()) }</li>
+				<li>{ localize_feature(Text::new_id("resource-stone"), self.properties.map_data.stone_amount()) }</li>
 			</ul>
 		}
 	}

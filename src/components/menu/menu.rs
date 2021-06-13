@@ -5,6 +5,7 @@ use
 		cell::RefCell,
 		rc::Rc,
 	},
+	maplit::hashmap,
 	yew::
 	{
 		prelude::*,
@@ -20,6 +21,7 @@ use
 		agents::
 		{
 			filter::{ Filter, FilterView },
+			localization::Text,
 			settings::{ MenuState, Request, Settings },
 		},
 		components::
@@ -29,6 +31,7 @@ use
 		data::
 		{
 			filter_method::FilterMethod,
+			language::Language,
 			map_attribute::{ ExpansionPack, MapCategory, ResourceAmount },
 			order_method::OrderMethod,
 		},
@@ -59,6 +62,7 @@ pub struct Menu
 	food_amount_filter: EnumSetFilter<ResourceAmount>,
 	gold_amount_filter: EnumSetFilter<ResourceAmount>,
 	stone_amount_filter: EnumSetFilter<ResourceAmount>,
+	language_filter: EnumFilter<Language>,
 	state: State,
 	filter: Rc<RefCell<Filter>>,
 }
@@ -111,34 +115,53 @@ impl Component for Menu
 			link: link.clone(),
 			settings: Settings::dispatcher(),
 			filter_method_filter: enum_filter_builder
-				.with_title("Szűrés módja")
+				.with_title(Text::new_id("filter-method"))
 				.build(Filter::get_filter_method, Filter::set_filter_method),
 			order_method_filter: enum_filter_builder
-				.with_title("Rendezés módja")
+				.with_title(Text::new_id("order-method"))
 				.build(Filter::get_order_method, Filter::set_order_method),
 			expansion_pack_filter: enum_filter_builder
-				.with_title("Kiegészítő")
+				.with_title(Text::new_id("attribute-expansion-pack"))
 				.build(Filter::get_expansion_pack, Filter::set_expansion_pack),
 			map_categories_filter: enum_set_filter_builder
-				.with_title("Kategóriák")
+				.with_title(Text::new_id("attribute-categories"))
 				.set_opened(true)
 				.build(Filter::is_allowed_map_category, Filter::toggle_allowed_map_category),
 			wood_amount_filter: enum_set_filter_builder
-				.with_title("Fa mennyisége")
+				.with_title(Text::new_id_args(
+					"attribute-resource-amount",
+					hashmap!{
+						"resource" => Text::new_id("resource-wood"),
+					}))
 				.set_opened(false)
 				.build(Filter::is_allowed_wood_amount, Filter::toggle_allowed_wood_amount),
 			food_amount_filter: enum_set_filter_builder
-				.with_title("Táplálék mennyisége")
-				.set_opened(false)
+			.with_title(Text::new_id_args(
+				"attribute-resource-amount",
+				hashmap!{
+					"resource" => Text::new_id("resource-food"),
+				}))
+			.set_opened(false)
 				.build(Filter::is_allowed_food_amount, Filter::toggle_allowed_food_amount),
 			gold_amount_filter: enum_set_filter_builder
-				.with_title("Arany mennyisége")
-				.set_opened(false)
+			.with_title(Text::new_id_args(
+				"attribute-resource-amount",
+				hashmap!{
+					"resource" => Text::new_id("resource-gold"),
+				}))
+			.set_opened(false)
 				.build(Filter::is_allowed_gold_amount, Filter::toggle_allowed_gold_amount),
 			stone_amount_filter: enum_set_filter_builder
-				.with_title("Kő mennyisége")
-				.set_opened(false)
+			.with_title(Text::new_id_args(
+				"attribute-resource-amount",
+				hashmap!{
+					"resource" => Text::new_id("resource-stone"),
+				}))
+			.set_opened(false)
 				.build(Filter::is_allowed_stone_amount, Filter::toggle_allowed_stone_amount),
+			language_filter: enum_filter_builder
+				.with_title(Text::new_id("language"))
+				.build(Filter::get_language, Filter::set_language),
 			state,
 			filter,
 		}
@@ -175,7 +198,7 @@ impl Component for Menu
 
 	fn change(&mut self, _: Self::Properties) -> ShouldRender
 	{
-		false
+		true
 	}
 
 	fn view(&self) -> Html
@@ -193,6 +216,7 @@ impl Component for Menu
 				{ self.food_amount_filter.render() }
 				{ self.gold_amount_filter.render() }
 				{ self.stone_amount_filter.render() }
+				{ self.language_filter.render() }
 				</div>
 			</div>
 		}

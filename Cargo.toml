@@ -9,6 +9,11 @@ crate-type = ["cdylib"]
 
 [dependencies]
 closure = "0.3.0"
+fluent = "0.15.0"
+fluent-templates = "0.6.1"
+lazy_static = "1.4.0"
+maplit = "1.0.2"
+unic-langid = "0.9.0"
 yew = "0.17.3"
 wasm-bindgen = "0.2.73"
 web-sys = {	version = "0.3.50", features = ["CssStyleDeclaration", "Document", "HtmlElement", "Window"] }

@@ -1,14 +1,19 @@
 // TODO Move to data?
 use
 {
-	crate::data::
+	crate::
 	{
-		enum_values::EnumValues,
-		filter_method::FilterMethod,
-		map_attribute::{ ExpansionPack, MapCategory, ResourceAmount },
-		map_attribute_set::MapAttributeSet,
-		map_data::MapData,
-		order_method::OrderMethod,
+		agents::localization::set_language,
+		data::
+		{
+			enum_values::EnumValues,
+			filter_method::FilterMethod,
+			language::Language,
+			map_attribute::{ ExpansionPack, MapCategory, ResourceAmount },
+			map_attribute_set::MapAttributeSet,
+			map_data::MapData,
+			order_method::OrderMethod,
+		},
 	},
 };
 
@@ -22,6 +27,7 @@ pub struct Filter
 	allowed_food_amount: MapAttributeSet<ResourceAmount>,
 	allowed_gold_amount: MapAttributeSet<ResourceAmount>,
 	allowed_stone_amount: MapAttributeSet<ResourceAmount>,
+	language: Language,
 }
 
 impl Filter
@@ -38,6 +44,7 @@ impl Filter
 			allowed_food_amount: MapAttributeSet::new(),
 			allowed_gold_amount: MapAttributeSet::new(),
 			allowed_stone_amount: MapAttributeSet::new(),
+			language: Language::default(),
 		}
 	}
 
@@ -105,6 +112,12 @@ impl Filter
 	{
 		self.allowed_stone_amount.toggle(stone_amount);
 	}
+
+	pub fn set_language(&mut self, language: Language)
+	{
+		self.language = language;
+		set_language(language);
+	}
 }
 
 pub trait FilterView
@@ -115,6 +128,7 @@ pub trait FilterView
 	fn is_allowed(&self, map_data: &MapData) -> bool;
 	fn is_allowed_by_expansion_pack(&self, map_data: &MapData) -> bool;
 	fn is_allowed_by_others(&self, map_data: &MapData) -> bool;
+	fn get_language(&self) -> Language;
 }
 
 impl FilterView for Filter
@@ -152,5 +166,10 @@ impl FilterView for Filter
 		self.allowed_food_amount.matches(map_data.food_amount()) &&
 		self.allowed_gold_amount.matches(map_data.gold_amount()) &&
 		self.allowed_stone_amount.matches(map_data.stone_amount())
+	}
+
+	fn get_language(&self) -> Language
+	{
+		self.language
 	}
 }

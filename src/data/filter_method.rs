@@ -5,6 +5,7 @@ use
 		fmt::{ Error, Formatter, Display },
 		slice::Iter,
 	},
+	crate::agents::localization::Text,
 	super::enum_values::EnumValues,
 };
 
@@ -22,9 +23,9 @@ impl FilterMethod
 	{
 		match self
 		{
-			FilterMethod::Hide => "Elrejtés",
-			FilterMethod::Disable => "Szürkítés",
-			FilterMethod::Mixed => "Vegyes",
+			FilterMethod::Hide => "filter-method-hide",
+			FilterMethod::Disable => "filter-method-disable",
+			FilterMethod::Mixed => "filter-method-mixed",
 		}
 	}
 }
@@ -56,5 +57,13 @@ impl EnumValues for FilterMethod
 			FilterMethod::Mixed,
 		];
 		VALUES.iter()
+	}
+}
+
+impl Into<Text> for FilterMethod
+{
+	fn into(self) -> Text
+	{
+		Text::new_id(self.to_string())
 	}
 }

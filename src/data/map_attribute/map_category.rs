@@ -6,6 +6,7 @@ use
 		result::Result,
 		slice::Iter,
 	},
+	crate::agents::localization::Text,
 	super::{ EnumValues, MapAttribute },
 };
 
@@ -63,6 +64,14 @@ impl Display for MapCategory
 		};
 
 		write!(formatter, "{}", description)
+	}
+}
+
+impl Into<Text> for MapCategory
+{
+	fn into(self) -> Text
+	{
+		Text::new_value(self.to_string())
 	}
 }
 
