@@ -6,8 +6,10 @@
 
 .accordion > button
 {
+	align-items: center;
 	border: 0;
 	cursor: pointer;
+	display: flex;
 	padding: 4px;
 	text-align: left;
 }
@@ -34,4 +36,16 @@
 	color: rgba(0, 0, 0, 1);
 	padding-bottom: 4px;
 	padding-top: 4px;
+}
+
+.accordion svg
+{
+	height: 10px;
+	transition: rotate 0.2s ease-in-out;
+	width: 10px;
+}
+
+.accordion svg.closed
+{
+	rotate: -90deg;
 }

@@ -30,18 +30,6 @@ pub enum Message
 
 impl Accordion
 {
-	fn button_icon(&self) -> &str
-	{
-		if self.is_opened
-		{
-			"⯆"
-		}
-		else
-		{
-			"⯈"
-		}
-	}
-
 	fn content_class(&self) -> &str
 	{
 		if self.is_opened
@@ -120,7 +108,9 @@ impl Component for Accordion
 		{
 			<div class="accordion">
 				<button onclick=self.link.callback(|_| Message::Toggle)>
-					{ self.button_icon() }
+					<svg class=self.content_class()>
+						<polygon points="0,0 5,10 10,0" />
+					</svg>
 					{ "\u{00A0}" }
 					{ &self.properties.title }
 				</button>
