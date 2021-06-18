@@ -41,29 +41,29 @@ pub struct Table
 
 impl Table
 {
-	fn render_maps(&self) -> Box<dyn Iterator<Item = Html> + '_>
+	fn render_maps(&self) -> Vec<Html>
 	{
 		match self.order_method
 		{
 			OrderMethod::Name =>
 			{
-				let result = self.properties.maps
+				let mut maps = self.properties.maps.clone();
+				maps.sort_by_key(|m| m.name().to_string());
+				maps
 					.iter()
-					.map(Self::render_map);
-
-				Box::new(result)
+					.map(Self::render_map)
+					.collect()
 			},
 			OrderMethod::ExpansionPack =>
 			{
-				let result = ExpansionPack
+				ExpansionPack
 					::values()
 					.copied()
 					.flat_map(move |e| self.properties.maps
 						.iter()
 						.filter(move |m| m.expansion_pack() == e)
-						.map(Self::render_map));
-
-				Box::new(result)
+						.map(Self::render_map))
+					.collect()
 			},
 		}
 	}
