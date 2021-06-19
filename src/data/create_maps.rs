@@ -446,5 +446,66 @@ pub fn create_maps() -> Vec<MapData>
 			ResourceAmount::Scarce,
 			ResourceAmount::Scarce,
 		),
+		MapData::new(
+			"Kilimanjaro",
+			ExpansionPack::TheAfricanKingdoms,
+			vec![
+				MapCategory::LandMap,
+				MapCategory::OpenMap,
+			],
+			ResourceAmount::Average,
+			ResourceAmount::Average,
+			ResourceAmount::Average,
+			ResourceAmount::Average,
+		),
+		MapData::new(
+			"Mountain Pass",
+			ExpansionPack::TheAfricanKingdoms,
+			vec![
+				MapCategory::LandMap,
+				MapCategory::NomadMap,
+			],
+			ResourceAmount::Average,
+			ResourceAmount::Average,
+			ResourceAmount::Average,
+			ResourceAmount::Average,
+		),
+		MapData::new(
+			"Nile Delta",
+			ExpansionPack::TheAfricanKingdoms,
+			vec![
+				MapCategory::MixedMap,
+				MapCategory::NomadMap,
+				MapCategory::MigrationMap,
+			],
+			ResourceAmount::Average,
+			ResourceAmount::Average,
+			ResourceAmount::Average,
+			ResourceAmount::Average,
+		),
+		MapData::new(
+			"Serengeti",
+			ExpansionPack::TheAfricanKingdoms,
+			vec![
+				MapCategory::LandMap,
+				MapCategory::OpenMap,
+			],
+			ResourceAmount::Scarce,
+			ResourceAmount::Average,
+			ResourceAmount::Average,
+			ResourceAmount::Average,
+		),
+		MapData::new(
+			"Socotra",
+			ExpansionPack::TheAfricanKingdoms,
+			vec![
+				MapCategory::LandMap,
+				MapCategory::OpenMap,
+			],
+			ResourceAmount::Average,
+			ResourceAmount::Average,
+			ResourceAmount::Average,
+			ResourceAmount::Average,
+		),
 	];
 }
