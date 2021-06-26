@@ -507,5 +507,66 @@ pub fn create_maps() -> Vec<MapData>
 			ResourceAmount::Average,
 			ResourceAmount::Average,
 		),
+		MapData::new(
+			"Bog Islands",
+			ExpansionPack::RiseOfTheRajas,
+			vec![
+				MapCategory::MixedMap,
+				MapCategory::OpenMap,
+			],
+			ResourceAmount::Scarce,
+			ResourceAmount::Average,
+			ResourceAmount::Average,
+			ResourceAmount::Average,
+		),
+		MapData::new(
+			"Mangrove Jungle",
+			ExpansionPack::RiseOfTheRajas,
+			vec![
+				MapCategory::MixedMap,
+				MapCategory::ClosedMap,
+			],
+			ResourceAmount::Plentiful,
+			ResourceAmount::Average,
+			ResourceAmount::Plentiful,
+			ResourceAmount::Plentiful,
+		),
+		MapData::new(
+			"Pacific Islands",
+			ExpansionPack::RiseOfTheRajas,
+			vec![
+				MapCategory::WaterMap,
+				MapCategory::MigrationMap,
+			],
+			ResourceAmount::Average,
+			ResourceAmount::Average,
+			ResourceAmount::Average,
+			ResourceAmount::Average,
+		),
+		MapData::new(
+			"Sandbank",
+			ExpansionPack::RiseOfTheRajas,
+			vec![
+				MapCategory::WaterMap,
+				MapCategory::ClosedMap,
+			],
+			ResourceAmount::Average,
+			ResourceAmount::Average,
+			ResourceAmount::Plentiful,
+			ResourceAmount::Plentiful,
+		),
+		MapData::new(
+			"Water Nomad",
+			ExpansionPack::RiseOfTheRajas,
+			vec![
+				MapCategory::MixedMap,
+				MapCategory::NomadMap,
+				MapCategory::OpenMap,
+			],
+			ResourceAmount::Average,
+			ResourceAmount::Average,
+			ResourceAmount::Average,
+			ResourceAmount::Average,
+		),
 	];
 }
